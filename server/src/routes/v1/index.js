@@ -1,0 +1,34 @@
+import express from 'express';
+import { authRouter } from '../../modules/auth/auth.routes.js';
+import { contactsRouter } from '../../modules/contacts/contacts.routes.js';
+import { donationsRouter } from '../../modules/donations/donations.routes.js';
+import { eventsRouter } from '../../modules/events/events.routes.js';
+import { galleryRouter } from '../../modules/gallery/gallery.routes.js';
+import { healthRouter } from '../../modules/health/health.routes.js';
+import { newsletterRouter } from '../../modules/newsletter/newsletter.routes.js';
+import { partnersRouter } from '../../modules/partners/partners.routes.js';
+import { postsRouter } from '../../modules/posts/posts.routes.js';
+import { programsRouter } from '../../modules/programs/programs.routes.js';
+import { projectsRouter } from '../../modules/projects/projects.routes.js';
+import { settingsRouter } from '../../modules/settings/settings.routes.js';
+import { testimonialsRouter } from '../../modules/testimonials/testimonials.routes.js';
+import { uploadsRouter } from '../../modules/uploads/uploads.routes.js';
+import { volunteersRouter } from '../../modules/volunteers/volunteers.routes.js';
+
+export const v1Router = express.Router();
+
+v1Router.use('/health', healthRouter);
+v1Router.use('/auth', authRouter);
+v1Router.use('/settings', settingsRouter);
+v1Router.use('/uploads', uploadsRouter);
+v1Router.use('/programs', programsRouter);
+v1Router.use('/projects', projectsRouter);
+v1Router.use('/events', eventsRouter);
+v1Router.use('/posts', postsRouter);
+v1Router.use('/gallery', galleryRouter);
+v1Router.use('/partners', partnersRouter);
+v1Router.use('/testimonials', testimonialsRouter);
+v1Router.use('/contacts', contactsRouter);
+v1Router.use('/newsletter', newsletterRouter);
+v1Router.use('/volunteers', volunteersRouter);
+v1Router.use('/donations', donationsRouter);
