@@ -15,16 +15,16 @@ export function AboutPage() {
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
-        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-white/80 font-sans text-[13px] font-medium">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">About Us</span>
+        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center justify-center gap-4 text-center">
+          <div className="flex items-center justify-center gap-2.5 font-sans text-[15px]">
+            <Link to="/" className="text-gray-400 font-normal hover:text-white transition-colors">Home</Link>
+            <span className="text-gray-400 font-normal">/</span>
+            <span className="text-white font-semibold tracking-wide">About Us</span>
           </div>
-          <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[600px] leading-[1.2]">
+          <h1 className="font-display text-[32px] lg:text-[56px] font-bold text-white max-w-[800px] leading-[1.2]">
             About Bhawna Foundation
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/80 max-w-[500px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[18px] font-normal text-white max-w-[600px] leading-[1.6]">
             Dedicated to transforming lives through compassion, education, and sustainable development.
           </p>
         </div>

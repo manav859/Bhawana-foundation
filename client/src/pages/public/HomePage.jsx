@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   Heart, Users, CheckCircle, ArrowRight, Layers, Target, 
   MessageCircle, Send, BookOpen, HeartPulse, Sparkles, Home,
-  Landmark, Globe, Building, Shield, Quote, Calendar, MapPin, Loader2
+  Landmark, Globe, Building, Shield, Quote, Calendar, MapPin, Loader2,
+  GraduationCap, Briefcase
 } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format.js';
@@ -47,28 +48,28 @@ export function HomePage() {
           <div className="absolute inset-0 bg-black/65" />
         </div>
 
-        <div className="relative z-10 w-full px-6 lg:px-[120px] flex flex-col gap-6 lg:w-[840px] max-w-[1440px] mx-auto">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full w-fit">
+        <div className="relative z-10 w-full px-6 lg:px-20 max-w-[1440px] mx-auto flex flex-col items-start gap-6">
+          <div className="flex items-center gap-2 px-4 py-2 bg-[#ffffff22] rounded-full w-fit">
             <div className="w-2 h-2 rounded-full bg-success-green" />
-            <span className="font-sans text-[13px] font-medium text-white/80">
+            <span className="font-sans text-[13px] font-medium text-[#ffffffcc]">
               Making a Difference Since 2015
             </span>
           </div>
 
-          <h1 className="font-display text-[32px] lg:text-[56px] font-bold text-white leading-[1.15] max-w-[680px]">
+          <h1 className="font-display text-[32px] lg:text-[64px] font-bold text-white leading-[1.1] max-w-[800px] text-left">
             Together We Can Change Lives
           </h1>
           
-          <p className="font-sans text-[15px] lg:text-[18px] font-normal text-white/80 leading-[1.6] lg:max-w-[580px]">
+          <p className="font-sans text-[15px] lg:text-[18px] font-normal text-white leading-[1.6] max-w-[600px] text-left">
             Bhawna Foundation works to improve education, healthcare, and community welfare across India. Join us in building a brighter future for those who need it most.
           </p>
 
-          <div className="flex flex-col lg:flex-row items-center gap-4 pt-2">
-            <Link to="/donate" className="flex items-center justify-center gap-2 w-full lg:w-auto px-8 py-4 bg-white rounded-lg transition-transform hover:scale-105 group">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2 w-full sm:w-auto">
+            <Link to="/donate" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white rounded-lg transition-transform hover:scale-105 group">
               <span className="font-sans text-base font-semibold text-primary-blue">Donate Now</span>
               <Heart className="w-[18px] h-[18px] text-primary-blue group-hover:fill-primary-blue transition-all" />
             </Link>
-            <Link to="/volunteer" className="flex items-center justify-center gap-2 w-full lg:w-auto px-8 py-4 bg-transparent border-2 border-white rounded-lg transition-colors hover:bg-white/10">
+            <Link to="/volunteer" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white rounded-lg transition-colors hover:bg-white/10">
               <span className="font-sans text-base font-semibold text-white">Become Volunteer</span>
               <Users className="w-[18px] h-[18px] text-white" />
             </Link>
@@ -249,98 +250,93 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {loading ? (
-               Array(3).fill(0).map((_, i) => (
-                <div key={i} className="h-[380px] bg-white rounded-xl border border-border-light animate-pulse" />
-              ))
-            ) : featuredProjects.length > 0 ? (
-              featuredProjects.map((project) => (
-                <div key={project._id} className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow group">
-                  <div className="w-full h-[200px] overflow-hidden">
-                    <img 
-                      src={project.images && project.images.length > 0 ? project.images[0] : 'https://images.unsplash.com/photo-1708417147232-e0c57faf8a39?q=80&w=600'} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2.5 p-6 w-full flex-1">
-                    <span className="font-sans text-[12px] font-semibold text-accent-blue tracking-[0.5px] uppercase">{project.category || 'Initiative'}</span>
-                    <h3 className="font-display text-[18px] font-semibold text-text-dark line-clamp-2">
-                       <Link to={`/projects/${project.slug}`} className="hover:text-primary-blue transition-colors">
-                        {project.title}
-                       </Link>
-                    </h3>
-                    <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6] line-clamp-3">
-                      {project.shortDescription || project.fullDescription?.substring(0, 100) + "..."}
-                    </p>
-                    <div className="mt-auto pt-4 border-t border-slate-100">
-                      <Link to={`/projects/${project.slug}`} className="flex items-center gap-2 text-primary-blue font-sans text-[14px] font-bold hover:gap-3 transition-all">
-                        View Details
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full py-10 text-text-secondary">No featured projects found.</p>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 5.5 Recent Events (Newly Added) */}
-      <section className="w-full bg-white px-6 py-[60px] lg:px-20 lg:py-[80px]">
-        <div className="flex flex-col gap-10 lg:gap-12 max-w-[1440px] mx-auto">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-light-blue rounded-full w-fit">
-                <Calendar className="w-3.5 h-3.5 text-primary-blue shrink-0" />
-                <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Recent Events</span>
+            {/* Card 1 */}
+            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
+              <div className="w-full h-[220px] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" 
+                  alt="Clean Water Initiative" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
               </div>
-              <h2 className="font-display text-[26px] lg:text-[36px] font-bold text-text-dark leading-[1.2]">
-                Our Recent Activities
-              </h2>
-            </div>
-            <Link to="/events" className="flex items-center gap-1.5 px-6 py-3 border-[1.5px] border-primary-blue rounded-lg group hover:bg-primary-blue transition-colors">
-              <span className="font-sans text-[14px] font-semibold text-primary-blue group-hover:text-white">View All Events</span>
-              <ArrowRight className="w-3.5 h-3.5 text-primary-blue group-hover:text-white" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {loading ? (
-               Array(3).fill(0).map((_, i) => (
-                <div key={i} className="h-[300px] bg-bg-light rounded-xl animate-pulse" />
-              ))
-            ) : recentEvents.length > 0 ? (
-              recentEvents.map((event) => (
-                <div key={event._id} className="flex flex-col bg-bg-light rounded-xl overflow-hidden border border-border-light hover:border-primary-blue/30 transition-all group">
-                  <div className="flex flex-col p-6 gap-3">
-                    <div className="flex items-center gap-2 text-primary-blue font-sans text-[13px] font-bold">
-                       <Calendar className="w-4 h-4" />
-                       <span>{formatDate(event.date)}</span>
-                    </div>
-                    <h3 className="font-display text-[18px] font-bold text-text-dark line-clamp-2 min-h-[54px] group-hover:text-primary-blue transition-colors">
-                       <Link to={`/events/${event.slug}`}>{event.title}</Link>
-                    </h3>
-                    <div className="flex items-center gap-2 text-text-secondary font-sans text-[13px]">
-                       <MapPin className="w-4 h-4" />
-                       <span>{event.location || 'Rural India'}</span>
-                    </div>
-                    <Link to={`/events/${event.slug}`} className="mt-4 flex items-center gap-2 text-text-dark font-sans text-[14px] font-semibold hover:text-primary-blue transition-colors">
-                      Read More
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
+              <div className="flex flex-col p-8 gap-4 flex-1">
+                <span className="font-sans text-[13px] font-semibold text-[#0ea5e9]">Water & Sanitation</span>
+                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Clean Water Initiative</h3>
+                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
+                  Providing access to clean drinking water in 50+ villages through bore wells and water purification systems.
+                </p>
+                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
+                  <div className="flex items-center gap-2">
+                    <Home className="w-4 h-4" />
+                    <span>50 Villages</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <span>10,000+ Lives</span>
                   </div>
                 </div>
-              ))
-            ) : (
-              <p className="text-center col-span-full py-10 text-text-secondary">No recent events found.</p>
-            )}
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
+              <div className="w-full h-[220px] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80" 
+                  alt="Digital Literacy Program" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                />
+              </div>
+              <div className="flex flex-col p-8 gap-4 flex-1">
+                <span className="font-sans text-[13px] font-semibold text-[#3b82f6]">Education</span>
+                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Digital Literacy Program</h3>
+                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
+                  Training students in computer skills and digital literacy to prepare them for the modern workforce.
+                </p>
+                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    <span>5,000 Students</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    <span>15 Centers</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
+              <div className="w-full h-[220px] overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80" 
+                  alt="Skill Development for Women" 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale" 
+                />
+              </div>
+              <div className="flex flex-col p-8 gap-4 flex-1">
+                <span className="font-sans text-[13px] font-semibold text-[#a855f7]">Women Empowerment</span>
+                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Skill Development for Women</h3>
+                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
+                  Vocational training and micro-enterprise support enabling women to become financially independent.
+                </p>
+                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <span>3,000 Women</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="w-4 h-4" />
+                    <span>800 Businesses</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* 6. Testimonials */}
       <section className="w-full bg-white px-6 py-[60px] lg:px-20 lg:py-[80px] border-t border-border-light">
@@ -532,7 +528,7 @@ export function HomePage() {
           <h2 className="font-display text-[24px] lg:text-[36px] font-bold text-white text-center">
             Your Support Can Change Lives
           </h2>
-          <p className="font-sans text-[16px] font-normal text-white/80 leading-[1.6] text-center lg:w-[560px]">
+          <p className="font-sans text-[16px] font-normal text-white leading-[1.6] text-center lg:w-[560px]">
             Every contribution, no matter how small, creates a ripple effect of positive change in someone's life.
           </p>
           <div className="flex flex-col lg:flex-row items-center gap-4 w-full justify-center">
