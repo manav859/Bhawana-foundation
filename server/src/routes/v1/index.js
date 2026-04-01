@@ -1,6 +1,7 @@
 import express from 'express';
 import { authRouter } from '../../modules/auth/auth.routes.js';
 import { contactsRouter } from '../../modules/contacts/contacts.routes.js';
+import { dashboardRouter } from '../../modules/dashboard/dashboard.routes.js';
 import { donationsRouter } from '../../modules/donations/donations.routes.js';
 import { eventsRouter } from '../../modules/events/events.routes.js';
 import { galleryRouter } from '../../modules/gallery/gallery.routes.js';
@@ -19,6 +20,7 @@ export const v1Router = express.Router();
 
 v1Router.use('/health', healthRouter);
 v1Router.use('/auth', authRouter);
+v1Router.use('/dashboard', dashboardRouter);
 v1Router.use('/settings', settingsRouter);
 v1Router.use('/uploads', uploadsRouter);
 v1Router.use('/programs', programsRouter);

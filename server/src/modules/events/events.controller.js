@@ -43,6 +43,13 @@ export const getEvent = catchAsync(async (req, res) => {
   sendResponse(res, { data: event, message: 'Event fetched successfully.' });
 });
 
+export const getAdminEvent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const event = await Event.findById(id);
+  if (!event) throw new ApiError(404, 'Event not found.');
+  sendResponse(res, { data: event, message: 'Admin event fetched successfully.' });
+});
+
 export const createEvent = catchAsync(async (req, res) => {
   const event = await Event.create(req.body);
   sendResponse(res, { statusCode: 201, data: event, message: 'Event created successfully.' });

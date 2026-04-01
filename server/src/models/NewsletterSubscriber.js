@@ -21,7 +21,6 @@ const newsletterSubscriberSchema = new mongoose.Schema(
 );
 
 // Indexes
-newsletterSubscriberSchema.index({ email: 1 }, { unique: true });
 newsletterSubscriberSchema.index({ isActive: 1 });
 
 const NewsletterSubscriber = mongoose.model('NewsletterSubscriber', newsletterSubscriberSchema);

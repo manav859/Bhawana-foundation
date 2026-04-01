@@ -6,49 +6,30 @@
 
 :root {
   color-scheme: light;
-  --color-brand-blue: #0b5ed7;
-  --color-brand-accent: #3fa9f5;
-  --color-brand-warm: #f59e0b;
-  --color-brand-success: #10b981;
-  --color-brand-dark: #1e293b;
-  --color-brand-secondary: #64748b;
-  --color-brand-muted: #94a3b8;
-  --color-brand-light: #f8fafc;
-  --color-brand-border: #e2e8f0;
+  --accent-blue: #3FA9F5;
+  --bg-light: #F8FAFC;
+  --border-light: #E2E8F0;
+  --coral-red: #EF4444;
+  --light-blue: #EAF2FF;
+  --primary-blue: #0B5ED7;
+  --success-green: #10B981;
+  --text-dark: #1E293B;
+  --text-muted: #94A3B8;
+  --text-secondary: #64748B;
+  --warm-orange: #F59E0B;
+  --white: #FFFFFF;
 }
 
 @layer base {
   * {
-    @apply border-brand-border;
+    @apply border-border-light;
   }
 
   body {
-    @apply min-h-screen bg-brand-light font-sans text-brand-dark antialiased;
+    @apply min-h-screen bg-bg-light font-sans text-text-dark antialiased;
   }
 
   a {
     @apply transition-colors duration-200;
-  }
-}
-
-@layer components {
-  .page-shell {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
-  }
-
-  .section-shell {
-    @apply py-12 sm:py-16 lg:py-20;
-  }
-
-  .surface-card {
-    @apply rounded-3xl border border-brand-border bg-white shadow-shell;
-  }
-
-  .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-blue;
-  }
-
-  .admin-grid {
-    @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
   }
 }

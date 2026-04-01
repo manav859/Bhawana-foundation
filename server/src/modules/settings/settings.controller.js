@@ -1,27 +1,33 @@
-import { publicShellSettings } from '../../constants/placeholder-content.js';
+import SiteSetting from '../../models/SiteSetting.js';
+import { catchAsync } from '../../utils/catch-async.js';
 import { sendResponse } from '../../utils/send-response.js';
 
-const mutableSettings = { ...publicShellSettings };
-
-export function getPublicShellSettings(_req, res) {
+/** GET /settings/public-shell (public) */
+export const getPublicShellSettings = catchAsync(async (_req, res) => {
+  const settings = await SiteSetting.getSettings();
   sendResponse(res, {
-    data: mutableSettings,
+    data: {
+      organizationName: settings.siteName,
+      tagline: 'Compassion-led community impact across India.',
+      location: settings.address,
+      email: settings.contactEmail,
+      phone: settings.phone,
+      socialLinks: settings.socialLinks,
+    },
     message: 'Public shell settings fetched successfully.',
   });
-}
+});
 
-export function getAdminSettings(_req, res) {
-  sendResponse(res, {
-    data: mutableSettings,
-    message: 'Admin settings fetched successfully.',
-  });
-}
+/** GET /settings (admin) */
+export const getAdminSettings = catchAsync(async (_req, res) => {
+  const settings = await SiteSetting.getSettings();
+  sendResponse(res, { data: settings, message: 'Admin settings fetched successfully.' });
+});
 
-export function updateAdminSettings(req, res) {
-  Object.assign(mutableSettings, req.body || {});
-
-  sendResponse(res, {
-    data: mutableSettings,
-    message: 'Settings updated successfully.',
-  });
-}
+/** PATCH /settings (admin) */
+export const updateAdminSettings = catchAsync(async (req, res) => {
+  let settings = await SiteSetting.getSettings();
+  Object.assign(settings, req.body);
+  await settings.save();
+  sendResponse(res, { data: settings, message: 'Settings updated successfully.' });
+});

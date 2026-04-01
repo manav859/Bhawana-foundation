@@ -9,9 +9,29 @@ export function AuthProvider({ children }) {
   const [bootstrapping, setBootstrapping] = useState(true);
 
   useEffect(() => {
-    const storedSession = getStoredSession();
-    setSession(storedSession);
-    setBootstrapping(false);
+    async function restoreSession() {
+      const storedSession = getStoredSession();
+      
+      if (!storedSession?.token) {
+        setBootstrapping(false);
+        return;
+      }
+
+      try {
+        const adminData = await authService.getCurrentAdmin();
+        const verifiedSession = { token: storedSession.token, admin: adminData };
+        setSession(verifiedSession);
+        setStoredSession(verifiedSession);
+      } catch (error) {
+        console.warn('Session restoration failed:', error.message);
+        clearStoredSession();
+        setSession(null);
+      } finally {
+        setBootstrapping(false);
+      }
+    }
+
+    restoreSession();
   }, []);
 
   const value = useMemo(

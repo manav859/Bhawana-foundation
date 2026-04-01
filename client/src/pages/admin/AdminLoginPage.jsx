@@ -8,7 +8,7 @@ export function AdminLoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: 'admin@bhawnafoundation.org', password: 'password123' });
+  const [form, setForm] = useState({ email: 'admin@bhawnafoundation.org', password: 'Admin@123' });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -42,9 +42,9 @@ export function AdminLoginPage() {
     <div className="surface-card overflow-hidden">
       <div className="bg-slate-950 px-6 py-8 text-white sm:px-8">
         <BrandMark theme="dark" />
-        <h1 className="mt-6 font-display text-3xl font-semibold">Admin sign in</h1>
+        <h1 className="mt-6 font-display text-3xl font-semibold">Admin Sign In</h1>
         <p className="mt-2 text-sm text-slate-300">
-          Mock auth is enabled by default for Phase 1 so the protected admin shell can be reviewed before full authentication is built.
+          Sign in to access the foundation dashboard, manage content, and review operations.
         </p>
       </div>
 

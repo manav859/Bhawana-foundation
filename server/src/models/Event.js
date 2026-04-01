@@ -59,7 +59,6 @@ const eventSchema = new mongoose.Schema(
 );
 
 // Indexes
-eventSchema.index({ slug: 1 }, { unique: true });
 eventSchema.index({ status: 1, isFeatured: 1 });
 eventSchema.index({ date: -1 });
 eventSchema.index({ category: 1 });

@@ -1,3 +1,17 @@
-import { createResourceRouter } from '../shared/resource.factory.js';
+import express from 'express';
+import { requireAdminAuth } from '../../middlewares/auth.middleware.js';
+import { validate } from '../../middlewares/validate-request.middleware.js';
+import { createBlogSchema, updateBlogSchema } from '../../validations/blog.validation.js';
+import {
+  getPosts, getAllPosts, getPost,
+  createPost, updatePost, deletePost,
+} from './posts.controller.js';
 
-export const postsRouter = createResourceRouter('posts');
+export const postsRouter = express.Router();
+
+postsRouter.get('/', getPosts);
+postsRouter.get('/:identifier', getPost);
+postsRouter.get('/admin/all', requireAdminAuth, getAllPosts);
+postsRouter.post('/', requireAdminAuth, validate(createBlogSchema), createPost);
+postsRouter.patch('/:id', requireAdminAuth, validate(updateBlogSchema), updatePost);
+postsRouter.delete('/:id', requireAdminAuth, deletePost);

@@ -41,7 +41,6 @@ const userSchema = new mongoose.Schema(
 );
 
 // Index
-userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ role: 1, isActive: 1 });
 
 // Pre-save: hash password

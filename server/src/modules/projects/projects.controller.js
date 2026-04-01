@@ -42,6 +42,13 @@ export const getProject = catchAsync(async (req, res) => {
   sendResponse(res, { data: project, message: 'Project fetched successfully.' });
 });
 
+export const getAdminProject = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const project = await Project.findById(id).populate('relatedProgram', 'title slug');
+  if (!project) throw new ApiError(404, 'Project not found.');
+  sendResponse(res, { data: project, message: 'Admin project fetched successfully.' });
+});
+
 export const createProject = catchAsync(async (req, res) => {
   const project = await Project.create(req.body);
   sendResponse(res, { statusCode: 201, data: project, message: 'Project created successfully.' });

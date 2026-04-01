@@ -64,7 +64,6 @@ const projectSchema = new mongoose.Schema(
 );
 
 // Indexes
-projectSchema.index({ slug: 1 }, { unique: true });
 projectSchema.index({ status: 1, isFeatured: 1 });
 projectSchema.index({ category: 1 });
 projectSchema.index({ relatedProgram: 1 });
