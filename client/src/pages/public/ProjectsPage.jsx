@@ -1,81 +1,173 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, ArrowRight, MapPin, Loader2, AlertCircle, DatabaseIcon } from 'lucide-react';
+import { ArrowRight, MapPin, Loader2, AlertCircle } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
 
-const categories = ["All", "Education", "Healthcare", "Livelihood", "Infrastructure", "Environment"];
+const categories = ["All Projects", "Education", "Healthcare", "Women Empowerment"];
+
+const STATIC_PROJECTS = [
+  {
+    id: 1,
+    slug: "school-reconstruction",
+    category: "Education",
+    categoryColor: "bg-[#3B82F6]",
+    location: "Sirohi, Rajasthan",
+    title: "School Reconstruction Project",
+    desc: "Rebuilding a primary school destroyed in the floods to get 300 children back into classrooms.",
+    raised: "₹2,50,000",
+    goal: "₹5,00,000",
+    percent: "50%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  },
+  {
+    id: 2,
+    slug: "rural-mobile-clinic",
+    category: "Healthcare",
+    categoryColor: "bg-[#38BDF8]",
+    location: "Bhilwara, Rajasthan",
+    title: "Rural Mobile Clinic",
+    desc: "Providing weekly free medical checkups and essential medicines to 5 remote villages.",
+    raised: "₹1,20,000",
+    goal: "₹2,00,000",
+    percent: "60%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  },
+  {
+    id: 3,
+    slug: "womens-sewing-center",
+    category: "Women Empowerment",
+    badgeText: "Empowerment",
+    categoryColor: "bg-[#10B981]",
+    location: "Udaipur, Rajasthan",
+    title: "Women's Sewing Center",
+    desc: "Setting up a vocational training center with 20 sewing machines for local women to become financially independent.",
+    raised: "₹40,000",
+    goal: "₹1,50,000",
+    percent: "26%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  },
+  {
+    id: 4,
+    slug: "clean-drinking-water",
+    category: "Community",
+    categoryColor: "bg-[#F59E0B]",
+    location: "Jodhpur, Rajasthan",
+    title: "Clean Drinking Water",
+    desc: "Installation of a solar-powered water RO plant to supply clean water to 500 families.",
+    raised: "₹3,00,000",
+    goal: "₹3,00,000",
+    percent: "100%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  },
+  {
+    id: 5,
+    slug: "adult-literacy-campaign",
+    category: "Education",
+    categoryColor: "bg-[#3B82F6]",
+    location: "Jaipur Slums",
+    title: "Adult Literacy Campaign",
+    desc: "Three-month intensive literacy campaign targeting 100 adult men and women to teach them basic reading and math.",
+    raised: "₹15,000",
+    goal: "₹50,000",
+    percent: "30%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  },
+  {
+    id: 6,
+    slug: "sanitation-drives",
+    category: "Healthcare",
+    categoryColor: "bg-[#38BDF8]",
+    location: "Alwar, Rajasthan",
+    title: "Sanitation Drives",
+    desc: "Constructing 20 public toilets to improve sanitation and reduce disease outbreaks.",
+    raised: "₹80,000",
+    goal: "₹4,00,000",
+    percent: "20%",
+    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
+  }
+];
 
 export function ProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All Projects");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchProjects();
-  }, [activeCategory]);
+  }, []);
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
       setError(null);
+      const res = await publicService.getProjects();
+      const fetchedProjects = res.data.data;
       
-      const params = { limit: 50 };
-      if (activeCategory !== "All") {
-        params.category = activeCategory;
+      // If there are no projects in the database, fallback to STATIC_PROJECTS for design demonstration
+      if (!fetchedProjects || fetchedProjects.length === 0) {
+        setProjects(STATIC_PROJECTS);
+      } else {
+        setProjects(fetchedProjects);
       }
-      
-      const res = await publicService.getProjects(params);
-      setProjects(res.data.data || []);
     } catch (err) {
-      setError(err.message || "Failed to load projects. Please try again later.");
+      console.error("Failed to load projects", err);
+      setError("Failed to load active projects. Please try again later.");
+      // Even on error, show static projects so the page isn't empty
+      setProjects(STATIC_PROJECTS);
     } finally {
       setLoading(false);
     }
   };
 
-  // Although our API supports category filters, we double check here
-  const filteredProjects = activeCategory === "All" 
+  const filteredProjects = activeCategory === "All Projects" 
     ? projects 
-    : projects.filter(project => project.category?.toLowerCase() === activeCategory.toLowerCase());
+    : projects.filter(project => project.category === activeCategory);
 
   return (
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-primary-blue overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+      <section className="relative w-full h-[340px] overflow-hidden flex items-center">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1593113563332-f36e8976b92a?q=80&w=1080&auto=format&fit=crop" 
+            alt="Projects Hero Background" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/65" />
+        </div>
         
-        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-white/80 font-sans text-[13px] font-medium">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">Our Projects</span>
+        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
+          <div className="flex items-center justify-center gap-1.5 font-sans text-[13px] mb-3">
+            <Link to="/" className="text-white opacity-70 font-medium hover:opacity-100 transition-opacity">Home</Link>
+            <span className="text-white opacity-70 font-medium">/</span>
+            <span className="text-white font-bold tracking-wide">Projects</span>
           </div>
-          <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[600px] leading-[1.2]">
-            Our Projects
+          <h1 className="font-display text-[40px] lg:text-[64px] font-bold text-white max-w-[800px] leading-[1.1] mb-5 tracking-tight">
+            Our Active Projects
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/80 max-w-[500px] leading-[1.6]">
-            Explore our on-the-ground initiatives creating tangible, lasting impact across communities.
+          <p className="font-sans text-[15px] lg:text-[17px] font-normal text-white opacity-80 max-w-[650px] leading-[1.6]">
+            Explore our on-the-ground initiatives creating tangible, lasting impact across<br className="hidden sm:block" />
+            communities.
           </p>
         </div>
       </section>
 
       {/* 2. Filters & Projects Grid */}
-      <section className="w-full px-6 lg:px-[120px] py-[60px] lg:py-[80px] max-w-[1440px] mx-auto flex flex-col gap-10">
+      <section className="w-full px-6 lg:px-[120px] py-[60px] lg:py-[80px] max-w-[1440px] mx-auto flex flex-col gap-14">
         
-        {/* Categories / Tabs */}
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        {/* Categories / Tabs - Centered like image */}
+        <div className="flex items-center justify-center gap-4 flex-wrap">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2.5 rounded-full font-sans text-[14px] font-semibold transition-all whitespace-nowrap border ${
+              className={`px-6 py-2 rounded-full font-sans text-[14px] font-medium transition-all shadow-sm ${
                 activeCategory === cat 
-                  ? 'bg-primary-blue text-white shadow-md border-primary-blue' 
-                  : 'bg-white border-border-light text-text-secondary hover:text-text-dark hover:border-border-dark'
+                  ? 'bg-primary-blue text-white border border-primary-blue' 
+                  : 'bg-white border border-primary-blue/20 text-text-secondary hover:text-text-dark hover:border-border-dark'
               }`}
             >
               {cat}
@@ -83,69 +175,83 @@ export function ProjectsPage() {
           ))}
         </div>
 
-        {/* Project Cards Grid */}
-        <div className="min-h-[400px]">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-border-light shadow-sm">
-              <Loader2 className="w-10 h-10 text-primary-blue animate-spin mb-4" />
-              <p className="text-text-secondary font-medium">Loading projects...</p>
-            </div>
-          ) : error ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-red-100 shadow-sm">
-              <AlertCircle className="w-10 h-10 text-red-500 mb-4" />
-              <h3 className="font-display text-[20px] font-bold text-text-dark">Unable to load projects</h3>
-              <p className="font-sans text-[15px] text-text-secondary mt-2">{error}</p>
-              <button onClick={fetchProjects} className="mt-6 px-8 py-2 bg-primary-blue text-white rounded-lg font-bold">Retry</button>
-            </div>
-          ) : (!Array.isArray(filteredProjects) || filteredProjects.length === 0) ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-border-light shadow-sm">
-              <DatabaseIcon className="w-12 h-12 text-border-dark mb-4" />
-              <h3 className="font-display text-[20px] font-bold text-text-dark">No Projects Found</h3>
-              <p className="font-sans text-[15px] text-text-secondary mt-2">There are currently no {activeCategory === "All" ? "" : activeCategory.toLowerCase()} projects to display.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in">
-              {filteredProjects.map((project) => (
-                <div key={project._id} className="flex flex-col bg-white rounded-2xl overflow-hidden border border-border-light shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
-                  <div className="relative w-full h-[220px] overflow-hidden">
-                    <img 
-                      src={project.images && project.images.length > 0 ? project.images[0] : 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600'} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                    />
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      <span className="px-3 py-1 bg-white text-text-dark font-sans text-[12px] font-bold rounded-full shadow-sm">
-                        {project.category || 'Initiative'}
-                      </span>
-                      <span className={`px-3 py-1 text-white font-sans text-[12px] font-bold rounded-full shadow-sm capitalize ${project.status === 'published' ? 'bg-success-green' : 'bg-warm-orange'}`}>
-                        {project.status === 'published' ? 'Active' : project.status}
-                      </span>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
+            <p className="text-text-secondary font-medium">Loading projects...</p>
+          </div>
+        ) : error && projects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+            <p className="text-text-secondary font-medium">{error}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10">
+            {filteredProjects.map((project) => (
+              <div key={project._id || project.id} className="flex flex-col bg-white rounded-[16px] overflow-hidden border border-border-light shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+                
+                {/* Card Image */}
+                <Link to={`/projects/${project.slug}`} className="relative w-full h-[220px] overflow-hidden">
+                  <img 
+                    src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm ${project.categoryColor || 'bg-primary-blue'}`}>
+                    {project.badgeText || project.category}
+                  </div>
+                </Link>
+                
+                {/* Card Content */}
+                <div className="flex flex-col p-6 flex-1 gap-3">
+                  <div className="flex items-center gap-1.5 text-text-secondary">
+                    <MapPin className="w-[14px] h-[14px]" />
+                    <span className="font-sans text-[12px] font-medium">{project.location}</span>
+                  </div>
+                  
+                  <h3 className="font-display text-[18px] font-bold text-text-dark leading-tight group-hover:text-primary-blue transition-colors">
+                    <Link to={`/projects/${project.slug}`}>
+                      {project.title}
+                    </Link>
+                  </h3>
+                  
+                  <p className="font-sans text-[13px] font-normal text-text-secondary leading-[1.6]">
+                    {project.desc || project.shortDescription}
+                  </p>
+                  
+                  <div className="flex flex-col gap-2 mt-auto pt-4">
+                    <div className="w-full h-[6px] bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary-blue rounded-full" style={{ width: project.percent || '0%' }}></div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-text-secondary font-medium tracking-wide">Raised</span>
+                        <span className="text-[14px] font-bold text-primary-blue">{project.raised || `₹${project.raisedAmount || 0}`}</span>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="text-[10px] text-text-secondary font-medium tracking-wide">Goal</span>
+                        <span className="text-[14px] font-bold text-text-dark">{project.goal || `₹${project.targetAmount || 0}`}</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col p-6 gap-4 flex-1">
-                    <div className="flex items-center gap-2 text-text-secondary">
-                      <MapPin className="w-4 h-4" />
-                      <span className="font-sans text-[13px] font-medium">{project.location || 'Pan India'}</span>
-                    </div>
-                    <h3 className="font-display text-[20px] font-bold text-text-dark leading-tight group-hover:text-primary-blue transition-colors line-clamp-2">
-                      <Link to={`/projects/${project.slug}`}>
-                        {project.title}
-                      </Link>
-                    </h3>
-                    <p className="font-sans text-[15px] font-normal text-text-secondary leading-[1.6] line-clamp-3 flex-1">
-                      {project.shortDescription || project.fullDescription?.substring(0, 120) + "..."}
-                    </p>
-                    <Link to={`/projects/${project.slug}`} className="flex items-center gap-2 text-primary-blue font-sans text-[14px] font-bold mt-2 hover:gap-3 transition-all">
-                      View Project Details
-                      <ArrowRight className="w-4 h-4" />
+                  
+                  <div className="flex items-center justify-between pt-4 mt-2 border-t border-border-light">
+                    <button className="text-primary-blue font-sans text-[13px] font-bold hover:opacity-80 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                      Donate Now
+                    </button>
+                    <Link 
+                      to={`/projects/${project.slug}`}
+                      className="flex items-center gap-1 text-text-dark font-sans text-[13px] font-bold transition-all duration-300 hover:text-primary-blue hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Details <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
 
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
     </main>

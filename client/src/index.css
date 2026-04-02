@@ -32,4 +32,8 @@
   a {
     @apply transition-colors duration-200;
   }
+
+  button, .btn-hover-effect {
+    @apply transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer;
+  }
 }

@@ -65,11 +65,11 @@ export function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2 w-full sm:w-auto">
-            <Link to="/donate" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white rounded-lg transition-transform hover:scale-105 group">
+            <Link to="/donate" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg group">
               <span className="font-sans text-base font-semibold text-primary-blue">Donate Now</span>
               <Heart className="w-[18px] h-[18px] text-primary-blue group-hover:fill-primary-blue transition-all" />
             </Link>
-            <Link to="/volunteer" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white rounded-lg transition-colors hover:bg-white/10">
+            <Link to="/volunteer" className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-white rounded-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:bg-white/10 hover:shadow-md">
               <span className="font-sans text-base font-semibold text-white">Become Volunteer</span>
               <Users className="w-[18px] h-[18px] text-white" />
             </Link>
@@ -250,89 +250,89 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
-              <div className="w-full h-[220px] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80" 
-                  alt="Clean Water Initiative" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                />
-              </div>
-              <div className="flex flex-col p-8 gap-4 flex-1">
-                <span className="font-sans text-[13px] font-semibold text-[#0ea5e9]">Water & Sanitation</span>
-                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Clean Water Initiative</h3>
-                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
-                  Providing access to clean drinking water in 50+ villages through bore wells and water purification systems.
-                </p>
-                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
-                  <div className="flex items-center gap-2">
-                    <Home className="w-4 h-4" />
-                    <span>50 Villages</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span>10,000+ Lives</span>
+            {(featuredProjects.length > 0 ? featuredProjects : [
+              {
+                slug: "clean-water-initiative",
+                category: "Water & Sanitation",
+                categoryColor: "text-[#0ea5e9]",
+                title: "Clean Water Initiative",
+                desc: "Providing access to clean drinking water in 50+ villages through bore wells and water purification systems.",
+                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80",
+                stats: [
+                  { icon: Home, label: "50 Villages" },
+                  { icon: Users, label: "10,000+ Lives" }
+                ]
+              },
+              {
+                slug: "digital-literacy-program",
+                category: "Education",
+                categoryColor: "text-[#3b82f6]",
+                title: "Digital Literacy Program",
+                desc: "Training students in computer skills and digital literacy to prepare them for the modern workforce.",
+                image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80",
+                stats: [
+                  { icon: GraduationCap, label: "5,000 Students" },
+                  { icon: MapPin, label: "15 Centers" }
+                ]
+              },
+              {
+                slug: "skill-development-for-women",
+                category: "Women Empowerment",
+                categoryColor: "text-[#a855f7]",
+                title: "Skill Development for Women",
+                desc: "Vocational training and micro-enterprise support enabling women to become financially independent.",
+                image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80",
+                stats: [
+                  { icon: Users, label: "3,000 Women" },
+                  { icon: Briefcase, label: "800 Businesses" }
+                ]
+              }
+            ]).map((project, idx) => (
+              <div key={project._id || idx} className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-all duration-300">
+                <Link to={`/projects/${project.slug}`} className="w-full h-[220px] overflow-hidden">
+                  <img 
+                    src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80"} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                  />
+                </Link>
+                <div className="flex flex-col p-8 gap-4 flex-1">
+                  <span className={`font-sans text-[13px] font-semibold ${project.categoryColor || 'text-primary-blue'}`}>
+                    {project.category || 'Initiative'}
+                  </span>
+                  <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3] group-hover:text-primary-blue transition-colors">
+                    <Link to={`/projects/${project.slug}`}>
+                      {project.title}
+                    </Link>
+                  </h3>
+                  <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
+                    {project.desc || project.shortDescription}
+                  </p>
+                  <div className="mt-auto pt-4 flex flex-col gap-4">
+                    <div className="flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
+                      {(project.stats || [
+                        { icon: Landmark, label: "Direct Impact" },
+                        { icon: Heart, label: "Community Led" }
+                      ]).map((stat, sIdx) => {
+                        const Icon = stat.icon;
+                        return (
+                          <div key={sIdx} className="flex items-center gap-2">
+                            <Icon className="w-4 h-4" />
+                            <span>{stat.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <Link 
+                      to={`/projects/${project.slug}`}
+                      className="flex items-center justify-center w-full py-3 bg-primary-blue text-white rounded-lg font-sans text-[14px] font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
+                    >
+                      View Details
+                    </Link>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
-              <div className="w-full h-[220px] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80" 
-                  alt="Digital Literacy Program" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                />
-              </div>
-              <div className="flex flex-col p-8 gap-4 flex-1">
-                <span className="font-sans text-[13px] font-semibold text-[#3b82f6]">Education</span>
-                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Digital Literacy Program</h3>
-                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
-                  Training students in computer skills and digital literacy to prepare them for the modern workforce.
-                </p>
-                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4" />
-                    <span>5,000 Students</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>15 Centers</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3 */}
-            <div className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-shadow">
-              <div className="w-full h-[220px] overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80" 
-                  alt="Skill Development for Women" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 grayscale" 
-                />
-              </div>
-              <div className="flex flex-col p-8 gap-4 flex-1">
-                <span className="font-sans text-[13px] font-semibold text-[#a855f7]">Women Empowerment</span>
-                <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3]">Skill Development for Women</h3>
-                <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
-                  Vocational training and micro-enterprise support enabling women to become financially independent.
-                </p>
-                <div className="mt-auto pt-2 flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
-                  <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    <span>3,000 Women</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Briefcase className="w-4 h-4" />
-                    <span>800 Businesses</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

@@ -32,21 +32,30 @@ export function BlogPage() {
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-primary-blue overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+      <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-[#111827] overflow-hidden">
+        {/* Hero Background Image with Neutral Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200" 
+            alt="Blog Hero" 
+            className="w-full h-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          {/* Abstract Background Shapes - Neutral */}
+          <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-white opacity-5 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+        </div>
         
-        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-white/80 font-sans text-[13px] font-medium">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">Blog</span>
+        <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center text-center gap-4">
+          <div className="flex items-center gap-2 font-sans text-[13px] font-medium text-white">
+            <Link to="/" className="opacity-70 hover:opacity-100 transition-opacity">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5 opacity-70" />
+            <span className="opacity-100">Blog</span>
           </div>
-          <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[600px] leading-[1.2]">
+          <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[800px] leading-[1.2]">
             Insights & Updates
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/80 max-w-[500px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white opacity-70 max-w-[600px] leading-[1.6]">
             Read the latest news, stories of change, and thoughts from our leadership team.
           </p>
         </div>

@@ -151,68 +151,67 @@ export function AboutPage() {
           <div className="flex flex-col gap-4 items-center">
             <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-light-blue rounded-full w-fit">
               <Clock className="w-3.5 h-3.5 text-primary-blue shrink-0" />
-              <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Timeline</span>
+              <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Our Journey</span>
             </div>
             <h2 className="font-display text-[28px] lg:text-[36px] font-bold text-text-dark text-center">
               Foundation History
             </h2>
           </div>
 
-          <div className="flex flex-col gap-8 relative">
-            <div className="absolute left-[20px] top-4 bottom-4 w-0.5 bg-border-light hidden lg:block" />
+          <div className="flex flex-col gap-10 lg:gap-12 relative w-full mt-4">
             
             {/* 2015 */}
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 relative">
-              <div className="hidden lg:flex w-10 h-10 shrink-0 bg-primary-blue rounded-full items-center justify-center z-10 border-4 border-bg-light relative -left-[3px]">
-                <span className="w-2.5 h-2.5 bg-white rounded-full" />
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-[60px] relative w-full items-stretch">
+              <div className="lg:w-[90px] shrink-0 text-left lg:text-right relative">
+                <span className="font-display text-[24px] lg:text-[28px] font-bold text-primary-blue leading-tight block">2015</span>
+                <div className="hidden lg:block absolute top-[18px] -right-[31px] w-[2px] h-[calc(100%+48px)] bg-primary-blue" />
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-display text-[24px] font-bold text-primary-blue lg:leading-tight">2015</span>
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">The Inception</h4>
-                <p className="font-sans text-[15px] font-normal text-text-secondary leading-[1.6]">
-                  Founded in Jaipur with a small team of 5 volunteers, beginning with basic literacy drives in 3 rural schools.
+              <div className="flex flex-col gap-2 flex-1 pb-2">
+                <h4 className="font-display text-[18px] lg:text-[20px] font-bold text-text-dark">The Beginning</h4>
+                <p className="font-sans text-[14px] lg:text-[15px] font-normal text-text-secondary leading-[1.6]">
+                  Founded in Jaipur with a small team of 5 passionate volunteers teaching 20 kids.
                 </p>
               </div>
             </div>
 
             {/* 2018 */}
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 relative">
-              <div className="hidden lg:flex w-10 h-10 shrink-0 bg-white border border-border-light rounded-full items-center justify-center z-10 relative -left-[3px]">
-                <span className="w-2.5 h-2.5 bg-accent-blue rounded-full" />
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-[60px] relative w-full items-stretch">
+              <div className="lg:w-[90px] shrink-0 text-left lg:text-right relative">
+                <span className="font-display text-[24px] lg:text-[28px] font-bold text-primary-blue leading-tight block">2018</span>
+                <div className="hidden lg:block absolute top-[18px] -right-[31px] w-[2px] h-[calc(100%+48px)] bg-primary-blue" />
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-display text-[24px] font-bold text-accent-blue lg:leading-tight">2018</span>
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Healthcare Expansion</h4>
-                <p className="font-sans text-[15px] font-normal text-text-secondary leading-[1.6]">
-                  Launched the mobile healthcare unit initiative, reaching out to 20+ isolated villages providing free medical checkups.
+              <div className="flex flex-col gap-2 flex-1 pb-2">
+                <h4 className="font-display text-[18px] lg:text-[20px] font-bold text-text-dark">Healthcare Expansion</h4>
+                <p className="font-sans text-[14px] lg:text-[15px] font-normal text-text-secondary leading-[1.6]">
+                  Launched our first mobile medical unit, reaching 50+ remote villages.
                 </p>
               </div>
             </div>
 
-            {/* 2021 */}
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 relative">
-              <div className="hidden lg:flex w-10 h-10 shrink-0 bg-white border border-border-light rounded-full items-center justify-center z-10 relative -left-[3px]">
-                <span className="w-2.5 h-2.5 bg-success-green rounded-full" />
+            {/* 2022 */}
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-[60px] relative w-full items-stretch">
+              <div className="lg:w-[90px] shrink-0 text-left lg:text-right relative">
+                <span className="font-display text-[24px] lg:text-[28px] font-bold text-primary-blue leading-tight block">2022</span>
+                <div className="hidden lg:block absolute top-[18px] -right-[31px] w-[2px] h-[calc(100%+48px)] bg-primary-blue" />
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-display text-[24px] font-bold text-success-green lg:leading-tight">2021</span>
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">National Recognition</h4>
-                <p className="font-sans text-[15px] font-normal text-text-secondary leading-[1.6]">
-                  Awarded the Best Community NGO award, crossing a milestone of 25,000 lives impacted through various parallel programs.
+              <div className="flex flex-col gap-2 flex-1 pb-2">
+                <h4 className="font-display text-[18px] lg:text-[20px] font-bold text-text-dark">National Recognition</h4>
+                <p className="font-sans text-[14px] lg:text-[15px] font-normal text-text-secondary leading-[1.6]">
+                  Recognized as Top 10 emerging NGOs in India. Crossed 1M lives impacted.
                 </p>
               </div>
             </div>
 
-            {/* 2025 */}
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 relative">
-              <div className="hidden lg:flex w-10 h-10 shrink-0 bg-white border border-border-light rounded-full items-center justify-center z-10 relative -left-[3px]">
-                <span className="w-2.5 h-2.5 bg-warm-orange rounded-full" />
+            {/* 2026 */}
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-[60px] relative w-full items-stretch">
+              <div className="lg:w-[90px] shrink-0 text-left lg:text-right relative">
+                <span className="font-display text-[24px] lg:text-[28px] font-bold text-primary-blue leading-tight block">2026</span>
+                <div className="hidden lg:block absolute top-[13px] -right-[35px] w-[10px] h-[10px] bg-primary-blue rounded-full" />
               </div>
-              <div className="flex flex-col gap-2">
-                <span className="font-display text-[24px] font-bold text-warm-orange lg:leading-tight">2025</span>
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Going Digital</h4>
-                <p className="font-sans text-[15px] font-normal text-text-secondary leading-[1.6]">
-                  Initiated massive digital literacy campaigns and expanded operations to 25 cities with over 2,500 active volunteers.
+              <div className="flex flex-col gap-2 flex-1 pb-2">
+                <h4 className="font-display text-[18px] lg:text-[20px] font-bold text-text-dark">Global Partnerships</h4>
+                <p className="font-sans text-[14px] lg:text-[15px] font-normal text-text-secondary leading-[1.6]">
+                  Partnered with WHO and UNICEF to scale our health and education initiatives.
                 </p>
               </div>
             </div>

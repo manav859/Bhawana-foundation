@@ -56,7 +56,7 @@ export function Footer() {
                 <a
                   key={idx}
                   href={social.url}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1E293B] text-[#94A3B8] transition-colors hover:bg-primary-blue hover:text-white"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1E293B] text-[#94A3B8] transition-all duration-300 hover:bg-primary-blue hover:text-white hover:scale-[1.1] active:scale-[0.9] hover:shadow-lg"
                 >
                   <Icon className="h-4 w-4" />
                 </a>

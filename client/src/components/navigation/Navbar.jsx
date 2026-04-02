@@ -50,7 +50,7 @@ export function Navbar() {
       <div className="hidden lg:block">
         <Link
           to="/donate"
-          className="flex items-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-[15px] font-semibold text-white transition-opacity hover:opacity-90"
+          className="flex items-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-[15px] font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
         >
           Donate Now
           <Heart className="h-4 w-4" fill="currentColor" strokeWidth={2} />
@@ -77,7 +77,7 @@ export function Navbar() {
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`font-sans text-base ${
+                  className={`font-sans text-base transition-colors hover:text-primary-blue ${
                     isActive ? 'text-primary-blue font-semibold' : 'text-text-dark font-medium'
                   }`}
                 >
@@ -89,7 +89,7 @@ export function Navbar() {
                <Link
                 to="/donate"
                 onClick={() => setIsOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-base font-semibold text-white transition-opacity hover:opacity-90"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
               >
                 Donate Now
                 <Heart className="h-4 w-4" fill="currentColor" strokeWidth={2} />
