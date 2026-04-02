@@ -9,9 +9,12 @@ import {
 
 export const postsRouter = express.Router();
 
-postsRouter.get('/', getPosts);
-postsRouter.get('/:identifier', getPost);
+// Admin routes (must come before /:identifier)
 postsRouter.get('/admin/all', requireAdminAuth, getAllPosts);
 postsRouter.post('/', requireAdminAuth, validate(createBlogSchema), createPost);
 postsRouter.patch('/:id', requireAdminAuth, validate(updateBlogSchema), updatePost);
 postsRouter.delete('/:id', requireAdminAuth, deletePost);
+
+// Public
+postsRouter.get('/', getPosts);
+postsRouter.get('/:identifier', getPost);

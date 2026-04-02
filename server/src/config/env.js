@@ -34,7 +34,10 @@ export const env = {
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1d',
   ADMIN_AUTH_MODE: process.env.ADMIN_AUTH_MODE || 'mock',
   UPLOAD_DIR: path.resolve(serverRoot, process.env.UPLOAD_DIR || 'uploads'),
-  MAX_FILE_SIZE_MB: toNumber(process.env.MAX_FILE_SIZE_MB, 5),
+  MAX_FILE_SIZE_MB: toNumber(process.env.MAX_FILE_SIZE_MB, 10),
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || '',
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || '',
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || '',
 };
 
 export const isProduction = env.NODE_ENV === 'production';

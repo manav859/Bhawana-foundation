@@ -7,7 +7,11 @@ import {
 
 export const testimonialsRouter = express.Router();
 
+// Public
 testimonialsRouter.get('/', getTestimonials);
+
+// Admin
+testimonialsRouter.get('/admin/all', requireAdminAuth, getTestimonials);
 testimonialsRouter.get('/:id', getTestimonial);
 testimonialsRouter.post('/', requireAdminAuth, createTestimonial);
 testimonialsRouter.patch('/:id', requireAdminAuth, updateTestimonial);

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, X, Loader2, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { RichTextEditor } from '@/components/ui/RichTextEditor.jsx';
+import { ImageUploader } from '@/components/ui/ImageUploader.jsx';
 import { adminService } from '@/features/api/services/admin.service';
 import { uploadService } from '@/features/api/services/upload.service';
 
@@ -204,13 +206,10 @@ export function AdminProjectEditor() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-text-dark">Full Description</label>
-            <textarea
-              name="fullDescription"
+            <RichTextEditor
+              label="Full Description"
               value={formData.fullDescription}
-              onChange={handleChange}
-              rows={8}
-              className="w-full px-4 py-3 rounded-lg border border-border-light bg-bg-light focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all font-sans text-[15px] resize-y"
+              onChange={(val) => setFormData(prev => ({ ...prev, fullDescription: val }))}
               placeholder="Detailed information about the project impact and activities..."
             />
           </div>

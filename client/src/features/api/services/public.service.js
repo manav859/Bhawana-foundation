@@ -31,4 +31,13 @@ export const publicService = {
   getPost(slug) {
     return http.get(`/posts/${slug}`);
   },
+  getGallery(params) {
+    return http.get('/gallery', { params });
+  },
+  getTestimonials(params) {
+    return http.get('/testimonials', { params });
+  },
+  getPartners(params) {
+    return http.get('/partners', { params });
+  },
 };
