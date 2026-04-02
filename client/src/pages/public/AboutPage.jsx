@@ -233,55 +233,25 @@ export function AboutPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 w-full">
-            {/* Team Member 1 */}
-            <div className="flex flex-col items-center gap-4 text-center group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden mb-2">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkwNDN8&ixlib=rb-4.1.0&q=80&w=400" alt="Team 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+          <div className="flex flex-col items-center justify-center w-full">
+            {/* Yash Malviya - Founder */}
+            <div className="flex flex-col items-center gap-6 text-center group max-w-[320px]">
+              <div className="w-56 h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden mb-2 border-4 border-light-blue shadow-md bg-white">
+                <img 
+                  src="/uploads/yash.png" 
+                  alt="Yash Malviya" 
+                  className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-500" 
+                />
               </div>
-              <div className="flex flex-col gap-1">
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Anita Sharma</h4>
-                <p className="font-sans text-[14px] font-medium text-primary-blue">Founder & President</p>
-              </div>
-            </div>
-            
-            {/* Team Member 2 */}
-            <div className="flex flex-col items-center gap-4 text-center group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden mb-2">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkwNDN8&ixlib=rb-4.1.0&q=80&w=400" alt="Team 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Rajeev Malik</h4>
-                <p className="font-sans text-[14px] font-medium text-primary-blue">Operations Director</p>
-              </div>
-            </div>
-
-            {/* Team Member 3 */}
-            <div className="flex flex-col items-center gap-4 text-center group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden mb-2">
-                <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkwNDN8&ixlib=rb-4.1.0&q=80&w=400" alt="Team 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Priya Desai</h4>
-                <p className="font-sans text-[14px] font-medium text-primary-blue">Head of Programs</p>
-              </div>
-            </div>
-
-            {/* Team Member 4 */}
-            <div className="flex flex-col items-center gap-4 text-center group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden mb-2">
-                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkwNDN8&ixlib=rb-4.1.0&q=80&w=400" alt="Team 4" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <h4 className="font-display text-[18px] font-semibold text-text-dark">Vikram Singh</h4>
-                <p className="font-sans text-[14px] font-medium text-primary-blue">Finance Controller</p>
+              <div className="flex flex-col gap-2">
+                <h4 className="font-display text-[22px] lg:text-[26px] font-bold text-text-dark">Yash Malviya</h4>
+                <p className="font-sans text-[15px] lg:text-[16px] font-semibold text-primary-blue tracking-wide uppercase">Founder & Director</p>
+                <p className="font-sans text-[14px] lg:text-[15px] font-normal text-text-secondary leading-[1.6] mt-1">
+                  Leading the mission to empower communities through innovation and compassionate leadership.
+                </p>
               </div>
             </div>
           </div>
-          
-          <button className="px-8 py-3.5 border border-border-light rounded-lg font-sans text-[15px] font-semibold text-text-dark hover:bg-bg-light transition-colors mt-2">
-            View All Team Members
-          </button>
         </div>
       </section>
 

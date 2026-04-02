@@ -67,37 +67,41 @@ export function Navbar() {
       </button>
 
       {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <div className="absolute left-0 top-16 w-full flex flex-col bg-white px-6 py-6 border-b border-border-light shadow-lg lg:hidden">
-          <div className="flex flex-col gap-6">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
-              return (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`font-sans text-base transition-colors hover:text-primary-blue ${
-                    isActive ? 'text-primary-blue font-semibold' : 'text-text-dark font-medium'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
-            <div className="mt-4 pt-4 border-t border-border-light">
-               <Link
-                to="/donate"
+      <div 
+        className={`absolute left-0 top-20 w-full flex flex-col bg-white px-6 py-6 border-b border-border-light shadow-lg lg:hidden transition-all duration-300 ease-in-out ${
+          isOpen 
+            ? 'translate-y-0 opacity-100 pointer-events-auto' 
+            : '-translate-y-4 opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col gap-6">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
+            return (
+              <Link
+                key={link.name}
+                to={link.path}
                 onClick={() => setIsOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
+                className={`font-sans text-base transition-colors hover:text-primary-blue ${
+                  isActive ? 'text-primary-blue font-semibold' : 'text-text-dark font-medium'
+                }`}
               >
-                Donate Now
-                <Heart className="h-4 w-4" fill="currentColor" strokeWidth={2} />
+                {link.name}
               </Link>
-            </div>
+            );
+          })}
+          <div className="mt-4 pt-4 border-t border-border-light">
+             <Link
+              to="/donate"
+              onClick={() => setIsOpen(false)}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
+            >
+              Donate Now
+              <Heart className="h-4 w-4" fill="currentColor" strokeWidth={2} />
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }
