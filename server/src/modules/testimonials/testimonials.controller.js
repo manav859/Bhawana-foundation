@@ -40,13 +40,19 @@ export const getTestimonial = catchAsync(async (req, res) => {
 
 /** POST /testimonials (admin) */
 export const createTestimonial = catchAsync(async (req, res) => {
-  const testimonial = await Testimonial.create(req.body);
+  const { name, role, quote, isFeatured } = req.body;
+  const testimonial = await Testimonial.create({ name, role, quote, isFeatured });
   sendResponse(res, { statusCode: 201, data: testimonial, message: 'Testimonial created successfully.' });
 });
 
 /** PATCH /testimonials/:id (admin) */
 export const updateTestimonial = catchAsync(async (req, res) => {
-  const testimonial = await Testimonial.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  const { name, role, quote, isFeatured } = req.body;
+  const testimonial = await Testimonial.findByIdAndUpdate(
+    req.params.id, 
+    { name, role, quote, isFeatured }, 
+    { new: true, runValidators: true }
+  );
   if (!testimonial) throw new ApiError(404, 'Testimonial not found.');
   sendResponse(res, { data: testimonial, message: 'Testimonial updated successfully.' });
 });

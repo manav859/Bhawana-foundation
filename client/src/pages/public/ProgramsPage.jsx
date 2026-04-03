@@ -9,7 +9,6 @@ export function ProgramsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchPrograms();
   }, []);
 

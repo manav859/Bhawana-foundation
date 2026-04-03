@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, MapPin, Clock, ChevronRight, Share2, Loader2, AlertCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton.jsx';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDateLong } from '@/utils/format.js';
 
@@ -11,7 +12,6 @@ export function EventDetailsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchEvent();
   }, [slug]);
 
@@ -30,10 +30,24 @@ export function EventDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-bg-light">
-        <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
-        <p className="text-text-secondary font-medium font-sans">Loading event details...</p>
-      </div>
+      <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
+        <section className="relative w-full h-[340px] bg-slate-200 animate-pulse flex items-center" />
+        <div className="px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 flex flex-col gap-8">
+            <Skeleton className="h-12 w-3/4" />
+            <Skeleton className="h-64 w-full" />
+            <div className="flex flex-col gap-4">
+               <Skeleton className="h-6 w-full" />
+               <Skeleton className="h-6 w-5/6" />
+               <Skeleton className="h-6 w-4/6" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-8">
+            <Skeleton className="h-64 w-full rounded-2xl" />
+            <Skeleton className="h-32 w-full rounded-2xl" />
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -62,6 +76,7 @@ export function EventDetailsPage() {
             className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             title="Click to view full image"
             onClick={() => window.open(event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1080", '_blank')}
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -114,6 +129,7 @@ export function EventDetailsPage() {
                   src={event.image} 
                   alt={event.title}
                   className="w-full h-auto object-cover max-h-[500px] group-hover:scale-[1.02] transition-transform duration-500"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                    <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>
@@ -194,7 +210,7 @@ export function EventDetailsPage() {
               <h3 className="font-display text-[16px] font-bold text-text-dark mb-4">Organization</h3>
               <div className="flex items-center gap-3">
                 <div className="w-20 h-20 rounded-full overflow-hidden shrink-0 border border-border-light flex items-center justify-center bg-white p-2">
-                   <img src="/uploads/logo.png" alt="Bhawna Foundation" className="max-w-full max-h-full object-contain" />
+                   <img src="/uploads/logo.png" alt="Bhawna Foundation" className="max-w-full max-h-full object-contain" loading="lazy" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-sans text-[14px] font-bold text-text-dark">Bhawna Foundation</span>

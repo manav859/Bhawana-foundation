@@ -3,6 +3,7 @@ import { RequireAdminAuth } from '@/features/auth/auth.guard.jsx';
 import { AdminLayout } from '@/layouts/AdminLayout.jsx';
 import { AuthLayout } from '@/layouts/AuthLayout.jsx';
 import { PublicLayout } from '@/layouts/PublicLayout.jsx';
+import ScrollToTop from '@/components/common/ScrollToTop.jsx';
 
 // Admin pages
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage.jsx';
@@ -52,6 +53,7 @@ import { DonationPolicyPage } from '@/pages/public/DonationPolicyPage.jsx';
 export function AppRouter() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* ===== PUBLIC ===== */}
         <Route element={<PublicLayout />}>

@@ -18,10 +18,6 @@ const testimonialSchema = new mongoose.Schema(
       trim: true,
       maxlength: [1000, 'Quote cannot exceed 1000 characters'],
     },
-    image: {
-      type: String,
-      trim: true,
-    },
     isFeatured: {
       type: Boolean,
       default: false,

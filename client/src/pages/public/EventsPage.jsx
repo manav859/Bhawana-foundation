@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
+import { EventSkeleton } from '@/components/ui/Skeleton.jsx';
 
 const categories = ["Upcoming", "Past"];
 
@@ -33,8 +34,21 @@ export function EventsPage() {
 
   if (isLoading) {
     return (
-      <main className="flex flex-col w-full bg-bg-light min-h-screen py-20 items-center justify-center">
-        <div className="text-text-secondary text-lg">Loading events...</div>
+      <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
+        <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-gray-900 overflow-hidden">
+          <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center text-center gap-4">
+            <div className="h-4 w-32 bg-white/20 animate-pulse rounded-full" />
+            <div className="h-12 w-3/4 bg-white/20 animate-pulse rounded-md" />
+            <div className="h-6 w-1/2 bg-white/20 animate-pulse rounded-md" />
+          </div>
+        </section>
+        <section className="w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-10 lg:mt-[60px]">
+          <div className="flex flex-col gap-6">
+            {[...Array(3)].map((_, i) => (
+              <EventSkeleton key={i} />
+            ))}
+          </div>
+        </section>
       </main>
     );
   }
@@ -114,6 +128,7 @@ export function EventsPage() {
                       src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600"} 
                       alt={event.title} 
                       className="w-full h-full object-cover transition-transform duration-500" 
+                      loading="lazy"
                     />
                   </div>
 

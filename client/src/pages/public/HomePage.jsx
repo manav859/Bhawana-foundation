@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format.js';
+import { CardSkeleton, Skeleton } from '@/components/ui/Skeleton.jsx';
 import { SubmitTestimonialModal } from '@/components/common/SubmitTestimonialModal.jsx';
 
 export function HomePage() {
@@ -59,6 +60,7 @@ export function HomePage() {
             src="https://images.unsplash.com/photo-1761039808159-f02b58f07032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc0ODV8&ixlib=rb-4.1.0&q=80&w=1080" 
             alt="Hero Background" 
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -122,6 +124,7 @@ export function HomePage() {
               src="https://images.unsplash.com/photo-1590874023110-f82d4c63b599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
               alt="About Us"
               className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
+              loading="lazy"
             />
           </div>
           <div className="flex flex-col gap-5 w-full lg:flex-1">
@@ -173,89 +176,65 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {(featuredProjects.length > 0 ? featuredProjects : [
-              {
-                slug: "clean-water-initiative",
-                category: "Water & Sanitation",
-                categoryColor: "text-[#0ea5e9]",
-                title: "Clean Water Initiative",
-                desc: "Providing access to clean drinking water in 50+ villages through bore wells and water purification systems.",
-                image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80",
-                stats: [
-                  { icon: Home, label: "50 Villages" },
-                  { icon: Users, label: "10,000+ Lives" }
-                ]
-              },
-              {
-                slug: "digital-literacy-program",
-                category: "Education",
-                categoryColor: "text-[#3b82f6]",
-                title: "Digital Literacy Program",
-                desc: "Training students in computer skills and digital literacy to prepare them for the modern workforce.",
-                image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80",
-                stats: [
-                  { icon: GraduationCap, label: "5,000 Students" },
-                  { icon: MapPin, label: "15 Centers" }
-                ]
-              },
-              {
-                slug: "skill-development-for-women",
-                category: "Women Empowerment",
-                categoryColor: "text-[#a855f7]",
-                title: "Skill Development for Women",
-                desc: "Vocational training and micro-enterprise support enabling women to become financially independent.",
-                image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80",
-                stats: [
-                  { icon: Users, label: "3,000 Women" },
-                  { icon: Briefcase, label: "800 Businesses" }
-                ]
-              }
-            ]).map((project, idx) => (
-              <div key={project._id || idx} className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-all duration-300">
-                <Link to={`/projects/${project.slug}`} className="w-full aspect-video overflow-hidden bg-slate-50 block">
-                  <img 
-                    src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80"} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500" 
-                  />
-                </Link>
-                <div className="flex flex-col p-8 gap-4 flex-1">
-                  <span className={`font-sans text-[13px] font-semibold ${project.categoryColor || 'text-primary-blue'}`}>
-                    {project.category || 'Initiative'}
-                  </span>
-                  <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3] group-hover:text-primary-blue transition-colors">
-                    <Link to={`/projects/${project.slug}`}>
-                      {project.title}
-                    </Link>
-                  </h3>
-                  <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
-                    {project.desc || project.shortDescription}
-                  </p>
-                  <div className="mt-auto pt-4 flex flex-col gap-4">
-                    <div className="flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
-                      {(project.stats || [
-                        { icon: Landmark, label: "Direct Impact" },
-                        { icon: Heart, label: "Community Led" }
-                      ]).map((stat, sIdx) => {
-                        const Icon = stat.icon;
-                        return (
-                          <div key={sIdx} className="flex items-center gap-2">
-                            <Icon className="w-4 h-4" />
-                            <span>{stat.label}</span>
-                          </div>
-                        );
-                      })}
+            {loading ? (
+              [...Array(3)].map((_, i) => (
+                <CardSkeleton key={i} />
+              ))
+            ) : featuredProjects.length === 0 ? (
+              <div className="col-span-full py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-border-light text-center">
+                <Target className="w-10 h-10 text-slate-300 mb-3" />
+                <h3 className="font-display text-lg font-semibold text-text-dark">No Projects Available</h3>
+                <p className="font-sans text-text-secondary">Explore our active projects on our projects page.</p>
+              </div>
+            ) : (
+              featuredProjects.map((project, idx) => (
+                <div key={project._id || idx} className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-all duration-300">
+                  <Link to={`/projects/${project.slug}`} className="w-full aspect-video overflow-hidden bg-slate-50 block">
+                    <img 
+                      src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80"} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover transition-transform duration-500" 
+                      loading="lazy"
+                    />
+                  </Link>
+                  <div className="flex flex-col p-8 gap-4 flex-1">
+                    <span className={`font-sans text-[13px] font-semibold ${project.categoryColor || 'text-primary-blue'}`}>
+                      {project.category || 'Initiative'}
+                    </span>
+                    <h3 className="font-display text-[22px] font-bold text-[#1f2937] leading-[1.3] group-hover:text-primary-blue transition-colors">
+                      <Link to={`/projects/${project.slug}`}>
+                        {project.title}
+                      </Link>
+                    </h3>
+                    <p className="font-sans text-[15px] font-normal text-[#6b7280] leading-[1.6]">
+                      {project.desc || project.shortDescription}
+                    </p>
+                    <div className="mt-auto pt-4 flex flex-col gap-4">
+                      <div className="flex items-center gap-5 text-[#6b7280] font-sans text-[13px] font-semibold">
+                        {(project.stats || [
+                          { icon: Landmark, label: "Direct Impact" },
+                          { icon: Heart, label: "Community Led" }
+                        ]).map((stat, sIdx) => {
+                          const Icon = stat.icon;
+                          return (
+                            <div key={sIdx} className="flex items-center gap-2">
+                              <Icon className="w-4 h-4" />
+                              <span>{stat.label}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <Link 
+                        to={`/projects/${project.slug}`}
+                        className="flex items-center justify-center w-full py-3 bg-primary-blue text-white rounded-lg font-sans text-[14px] font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
+                      >
+                        View Details
+                      </Link>
                     </div>
-                    <Link 
-                      to={`/projects/${project.slug}`}
-                      className="flex items-center justify-center w-full py-3 bg-primary-blue text-white rounded-lg font-sans text-[14px] font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
-                    >
-                      View Details
-                    </Link>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -289,7 +268,23 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             {testimonials.length > 0 ? (
+             {loading ? (
+               [...Array(3)].map((_, i) => (
+                 <div key={i} className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative animate-pulse">
+                   <div className="w-8 h-8 bg-slate-200 rounded-md mb-4" />
+                   <div className="h-4 bg-slate-200 rounded w-full mb-2" />
+                   <div className="h-4 bg-slate-200 rounded w-5/6 mb-2" />
+                   <div className="h-4 bg-slate-200 rounded w-4/6 mb-6" />
+                   <div className="flex items-center gap-3 pt-2 mt-auto">
+                     <div className="w-11 h-11 bg-slate-200 rounded-full" />
+                     <div className="flex flex-col gap-2">
+                       <div className="h-4 bg-slate-200 rounded w-24" />
+                       <div className="h-3 bg-slate-200 rounded w-16" />
+                     </div>
+                   </div>
+                 </div>
+               ))
+             ) : testimonials.length > 0 ? (
                testimonials.map((testimonial, idx) => {
                   const colors = [
                     { text: 'text-primary-blue', bg: 'bg-primary-blue' },
@@ -304,13 +299,9 @@ export function HomePage() {
                         “{testimonial.quote}”
                       </p>
                       <div className="flex items-center gap-3 pt-2">
-                        {testimonial.image ? (
-                          <img src={testimonial.image} alt={testimonial.name} className="w-11 h-11 rounded-full object-cover" />
-                        ) : (
-                          <div className={`flex items-center justify-center w-11 h-11 ${color.bg} rounded-full text-white font-sans text-base font-semibold uppercase`}>
-                            {testimonial.name[0]}
-                          </div>
-                        )}
+                        <div className={`flex items-center justify-center w-11 h-11 ${color.bg} rounded-full text-white font-sans text-base font-semibold uppercase`}>
+                          {testimonial.name[0]}
+                        </div>
                         <div className="flex flex-col">
                           <span className="font-sans text-[14px] font-semibold text-text-dark">{testimonial.name}</span>
                           {testimonial.role && <span className="font-sans text-[13px] font-normal text-text-secondary">{testimonial.role}</span>}
@@ -380,7 +371,11 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {recentPosts.length > 0 ? (
+            {loading ? (
+              [...Array(3)].map((_, i) => (
+                <CardSkeleton key={i} />
+              ))
+            ) : recentPosts.length > 0 ? (
               recentPosts.map((post) => (
                 <div key={post._id} className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
                   <Link to={`/blog/${post.slug}`} className="w-full aspect-video overflow-hidden bg-slate-50 block">
@@ -388,6 +383,7 @@ export function HomePage() {
                       src={post.featuredImage || "https://images.unsplash.com/photo-1692269725911-87697c558be1?q=80&w=600"} 
                       alt={post.title} 
                       className="w-full h-full object-cover transition-transform" 
+                      loading="lazy"
                     />
                   </Link>
                   <div className="flex flex-col gap-2.5 p-6 w-full">
@@ -407,8 +403,8 @@ export function HomePage() {
             ) : (
               <div className="col-span-1 md:col-span-3 py-12 flex flex-col items-center justify-center bg-bg-light rounded-xl border border-border-light text-center">
                 <BookOpen className="w-10 h-10 text-slate-300 mb-3" />
-                <h3 className="font-display text-lg font-semibold text-text-dark">No Posts Yet</h3>
-                <p className="font-sans text-text-secondary">Our latest stories will appear here soon.</p>
+                <h3 className="font-display text-lg font-semibold text-text-dark">No articles found</h3>
+                <p className="font-sans text-text-secondary">We're working on new stories. Check back soon!</p>
               </div>
             )}
           </div>
@@ -447,6 +443,7 @@ export function HomePage() {
             src="https://images.unsplash.com/photo-1636170310737-48abb9a69b2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc5OTh8&ixlib=rb-4.1.0&q=80&w=1080" 
             alt="CTA Background" 
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>

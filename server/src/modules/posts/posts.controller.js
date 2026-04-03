@@ -4,6 +4,12 @@ import { catchAsync } from '../../utils/catch-async.js';
 import { buildPagination, buildPaginationMeta, buildSort } from '../../utils/pagination.js';
 import { sendResponse } from '../../utils/send-response.js';
 
+export const getAdminPost = catchAsync(async (req, res) => {
+  const post = await BlogPost.findById(req.params.id);
+  if (!post) throw new ApiError(404, 'Blog post not found.');
+  sendResponse(res, { data: post, message: 'Admin blog post fetched successfully.' });
+});
+
 export const getPosts = catchAsync(async (req, res) => {
   const { page, limit, skip } = buildPagination(req.query);
   const sort = buildSort(req.query.sort);

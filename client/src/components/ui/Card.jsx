@@ -10,6 +10,7 @@ export function Card({ children, className = '', onClick, image, imageAlt }) {
             src={image}
             alt={imageAlt || ''}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
       )}

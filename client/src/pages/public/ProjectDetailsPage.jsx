@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MapPin, Calendar, Users, CheckCircle, ChevronRight, Share2, ArrowRight, Image as ImageIcon, Loader2, AlertCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton.jsx';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format.js';
 
@@ -50,10 +51,24 @@ export function ProjectDetailsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-bg-light">
-        <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
-        <p className="text-text-secondary font-medium">Loading project details...</p>
-      </div>
+      <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
+        <section className="relative w-full h-[340px] bg-slate-200 animate-pulse flex items-center" />
+        <div className="px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-2 flex flex-col gap-8">
+            <Skeleton className="h-12 w-3/4" />
+            <Skeleton className="h-64 w-full" />
+            <div className="flex flex-col gap-4">
+               <Skeleton className="h-6 w-full" />
+               <Skeleton className="h-6 w-5/6" />
+               <Skeleton className="h-6 w-4/6" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-8">
+            <Skeleton className="h-80 w-full rounded-2xl" />
+            <Skeleton className="h-40 w-full rounded-2xl" />
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -86,6 +101,7 @@ export function ProjectDetailsPage() {
             className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             title="Click to view full image"
             onClick={() => window.open(mainImage, '_blank')}
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -163,7 +179,7 @@ export function ProjectDetailsPage() {
                       className="w-full aspect-square md:h-[140px] rounded-lg overflow-hidden group cursor-pointer relative bg-slate-50"
                       onClick={() => window.open(img, '_blank')}
                     >
-                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500" />
+                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500" loading="lazy" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                         <ImageIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>

@@ -14,6 +14,7 @@ donationsRouter.post('/', validate(createDonationSchema), createDonation);
 
 // Admin
 donationsRouter.get('/', requireAdminAuth, getDonations);
+donationsRouter.get('/admin/:id', requireAdminAuth, getDonation);
 donationsRouter.get('/:id', requireAdminAuth, getDonation);
 donationsRouter.patch('/:id', requireAdminAuth, validate(updateDonationSchema), updateDonation);
 donationsRouter.delete('/:id', requireAdminAuth, deleteDonation);

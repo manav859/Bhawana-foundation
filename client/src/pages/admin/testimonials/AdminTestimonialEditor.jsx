@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { FormInput } from '@/components/ui/FormInput.jsx';
-import { ImageUploader } from '@/components/ui/ImageUploader.jsx';
 import { Button } from '@/components/ui/Button.jsx';
 import { adminService } from '@/features/api/services/admin.service.js';
 
@@ -13,12 +12,12 @@ export function AdminTestimonialEditor() {
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [form, setForm] = useState({ name: '', role: '', quote: '', image: '', isFeatured: false });
+  const [form, setForm] = useState({ name: '', role: '', quote: '', isFeatured: false });
 
   useEffect(() => { if (isEdit) load(); }, [id]);
   const load = async () => {
     try { setLoading(true); const res = await adminService.get('testimonials', id); const d = res.data.data;
-      setForm({ name: d.name || '', role: d.role || '', quote: d.quote || '', image: d.image || '', isFeatured: d.isFeatured || false });
+      setForm({ name: d.name || '', role: d.role || '', quote: d.quote || '', isFeatured: d.isFeatured || false });
     } catch (err) { setError(err.message); } finally { setLoading(false); }
   };
   const handleChange = (e) => { const { name, value, type, checked } = e.target; setForm(p => ({ ...p, [name]: type === 'checkbox' ? checked : value })); };
@@ -26,9 +25,8 @@ export function AdminTestimonialEditor() {
     e.preventDefault();
     if (!form.name || !form.quote) return alert('Name and quote are required');
     try { setSaving(true);
-      const payload = { ...form, image: typeof form.image === 'object' ? form.image.url : form.image };
-      if (isEdit) await adminService.update('testimonials', id, payload);
-      else await adminService.create('testimonials', payload);
+      if (isEdit) await adminService.update('testimonials', id, form);
+      else await adminService.create('testimonials', form);
       navigate('/admin/testimonials');
     } catch (err) { setError(err.message); } finally { setSaving(false); }
   };
@@ -49,7 +47,6 @@ export function AdminTestimonialEditor() {
             <FormInput label="Role / Title" name="role" value={form.role} onChange={handleChange} placeholder="E.g., Beneficiary" />
           </div>
           <FormInput label="Quote" name="quote" value={form.quote} onChange={handleChange} type="textarea" required />
-          <ImageUploader value={form.image} onChange={(img) => setForm(p => ({ ...p, image: img ? (img.url || img) : '' }))} label="Photo (optional)" accept="image/*" />
           <div className="flex items-center space-x-3">
             <input type="checkbox" id="isFeatured" name="isFeatured" checked={form.isFeatured} onChange={handleChange} className="w-5 h-5 rounded border-gray-300 text-primary-blue focus:ring-primary-blue" />
             <label htmlFor="isFeatured" className="text-sm font-medium text-text-dark cursor-pointer">Featured</label>

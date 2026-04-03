@@ -9,6 +9,7 @@ export const partnersRouter = express.Router();
 
 partnersRouter.get('/', getPartners);
 partnersRouter.get('/admin/all', requireAdminAuth, getAllPartners);
+partnersRouter.get('/admin/:id', requireAdminAuth, getPartner);
 partnersRouter.get('/:id', getPartner);
 partnersRouter.post('/', requireAdminAuth, createPartner);
 partnersRouter.patch('/:id', requireAdminAuth, updatePartner);

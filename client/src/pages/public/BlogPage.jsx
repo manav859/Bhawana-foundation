@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, ArrowRight, User, Calendar as CalendarIcon, Loader2, AlertCircle } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format';
+import { CardSkeleton } from '@/components/ui/Skeleton.jsx';
 
 export function BlogPage() {
   const [posts, setPosts] = useState([]);
@@ -10,7 +11,6 @@ export function BlogPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchPosts();
   }, []);
 
@@ -65,9 +65,10 @@ export function BlogPage() {
       <section className="w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-10 lg:mt-[60px]">
         
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
-            <p className="text-text-secondary font-medium">Loading articles...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
           </div>
         ) : error ? (
           <div className="flex flex-col items-center justify-center py-20 px-6">
@@ -93,7 +94,7 @@ export function BlogPage() {
             {posts.map((post) => (
               <div key={post._id} className="flex flex-col bg-white rounded-2xl overflow-hidden border border-border-light shadow-sm hover:shadow-md transition-shadow group flex-1">
                 <Link to={`/blog/${post.slug}`} className="relative w-full aspect-video overflow-hidden shrink-0 bg-slate-50 block">
-                  <img src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=600"} alt={post.title} className="w-full h-full object-cover transition-transform duration-500" />
+                  <img src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=600"} alt={post.title} className="w-full h-full object-cover transition-transform duration-500" loading="lazy" />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-primary-blue font-sans text-[12px] font-bold rounded-full shadow-sm uppercase tracking-[0.5px]">
                       {post.category || 'News'}

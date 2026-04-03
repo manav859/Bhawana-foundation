@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Calendar, User, ChevronRight, Share2, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/Skeleton.jsx';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format';
 
@@ -11,7 +12,6 @@ export function BlogDetailsPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchPost();
   }, [slug]);
 
@@ -31,9 +31,21 @@ export function BlogDetailsPage() {
 
   if (loading) {
     return (
-      <main className="flex flex-col w-full bg-bg-light min-h-screen pt-[120px] pb-20 items-center justify-center">
-        <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
-        <p className="text-text-secondary font-medium">Loading article details...</p>
+      <main className="flex flex-col w-full bg-bg-light min-h-screen pt-[120px] pb-20 px-6">
+        <div className="max-w-4xl mx-auto w-full flex flex-col gap-8">
+          <Skeleton className="h-10 w-3/4 mx-auto" />
+          <div className="flex justify-center gap-6">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-5 w-32" />
+          </div>
+          <Skeleton className="h-[400px] w-full rounded-2xl" />
+          <div className="flex flex-col gap-4">
+             <Skeleton className="h-6 w-full" />
+             <Skeleton className="h-6 w-full" />
+             <Skeleton className="h-6 w-5/6" />
+             <Skeleton className="h-6 w-4/6" />
+          </div>
+        </div>
       </main>
     );
   }
@@ -97,6 +109,7 @@ export function BlogDetailsPage() {
             src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200"} 
             alt={post.title} 
             className="w-full h-full object-cover transition-transform duration-700"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
              <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>

@@ -11,6 +11,7 @@ export const contactsRouter = express.Router();
 
 contactsRouter.post('/', validate(createContactSchema), createContact);
 contactsRouter.get('/', requireAdminAuth, getContacts);
+contactsRouter.get('/admin/:id', requireAdminAuth, getContact);
 contactsRouter.get('/:id', requireAdminAuth, getContact);
 contactsRouter.patch('/:id', requireAdminAuth, validate(updateContactSchema), updateContact);
 contactsRouter.delete('/:id', requireAdminAuth, deleteContact);

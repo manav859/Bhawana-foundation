@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Image as ImageIcon, Play, Loader2 } from 'lucide-react';
 import { http } from '@/features/api/http.js';
+import { Skeleton } from '@/components/ui/Skeleton.jsx';
 
 export function GalleryPage() {
   const [activeTab, setActiveTab] = useState('All');
@@ -99,8 +100,10 @@ export function GalleryPage() {
 
           {/* Loading State */}
           {loading && (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-primary-blue" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="aspect-square rounded-[24px]" />
+              ))}
             </div>
           )}
 
@@ -118,8 +121,8 @@ export function GalleryPage() {
           {!loading && !error && filteredGallery.length === 0 && (
             <div className="text-center py-16">
               <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="font-display text-xl font-semibold text-text-dark mb-2">No items yet</h3>
-              <p className="text-text-secondary">Gallery items will appear here once they are added.</p>
+              <h3 className="font-display text-xl font-semibold text-text-dark mb-2">No photos found</h3>
+              <p className="text-text-secondary">We'll be adding new photos soon. Check back later!</p>
             </div>
           )}
 
@@ -145,7 +148,7 @@ export function GalleryPage() {
                         onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
                       />
                     ) : (
-                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" />
+                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" loading="lazy" />
                     )}
                     
                     {/* Overlay */}

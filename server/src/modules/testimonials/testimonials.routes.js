@@ -14,6 +14,7 @@ testimonialsRouter.post('/submit', submitTestimonial);
 
 // Admin
 testimonialsRouter.get('/admin/all', requireAdminAuth, getTestimonials);
+testimonialsRouter.get('/admin/:id', requireAdminAuth, getTestimonial);
 testimonialsRouter.get('/:id', getTestimonial);
 testimonialsRouter.post('/', requireAdminAuth, createTestimonial);
 testimonialsRouter.patch('/:id', requireAdminAuth, updateTestimonial);

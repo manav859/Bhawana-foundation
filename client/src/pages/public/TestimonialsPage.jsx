@@ -60,13 +60,9 @@ export function TestimonialsPage() {
                     “{testimonial.quote}”
                   </p>
                   <div className="flex items-center gap-3 pt-4 border-t border-border-light/50">
-                    {testimonial.image ? (
-                       <img src={testimonial.image} alt={testimonial.name} className="w-11 h-11 rounded-full object-cover" />
-                    ) : (
-                      <div className="flex items-center justify-center w-11 h-11 bg-primary-blue rounded-full text-white font-sans text-base font-semibold uppercase">
-                        {testimonial.name[0]}
-                      </div>
-                    )}
+                    <div className="flex items-center justify-center w-11 h-11 bg-primary-blue rounded-full text-white font-sans text-base font-semibold uppercase">
+                      {testimonial.name[0]}
+                    </div>
                     <div className="flex flex-col leading-tight">
                       <span className="font-sans text-[14px] font-semibold text-text-dark">{testimonial.name}</span>
                       {testimonial.role && <span className="font-sans text-[13px] font-normal text-text-secondary">{testimonial.role}</span>}

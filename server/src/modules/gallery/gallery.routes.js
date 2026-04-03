@@ -12,6 +12,7 @@ galleryRouter.get('/', getGalleryItems);
 
 // Admin
 galleryRouter.get('/admin/all', requireAdminAuth, getGalleryItems);
+galleryRouter.get('/admin/:id', requireAdminAuth, getGalleryItem);
 galleryRouter.get('/:id', getGalleryItem);
 galleryRouter.post('/', requireAdminAuth, createGalleryItem);
 galleryRouter.patch('/:id', requireAdminAuth, updateGalleryItem);

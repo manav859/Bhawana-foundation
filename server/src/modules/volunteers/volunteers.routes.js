@@ -11,6 +11,7 @@ export const volunteersRouter = express.Router();
 
 volunteersRouter.post('/', validate(createVolunteerSchema), createVolunteer);
 volunteersRouter.get('/', requireAdminAuth, getVolunteers);
+volunteersRouter.get('/admin/:id', requireAdminAuth, getVolunteer);
 volunteersRouter.get('/:id', requireAdminAuth, getVolunteer);
 volunteersRouter.patch('/:id', requireAdminAuth, validate(updateVolunteerSchema), updateVolunteer);
 volunteersRouter.delete('/:id', requireAdminAuth, deleteVolunteer);

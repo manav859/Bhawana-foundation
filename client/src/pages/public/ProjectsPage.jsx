@@ -2,90 +2,11 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MapPin, Loader2, AlertCircle } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
+import { CardSkeleton } from '@/components/ui/Skeleton.jsx';
 
 const categories = ["All Projects", "Education", "Healthcare", "Women Empowerment"];
 
-const STATIC_PROJECTS = [
-  {
-    id: 1,
-    slug: "school-reconstruction",
-    category: "Education",
-    categoryColor: "bg-[#3B82F6]",
-    location: "Sirohi, Rajasthan",
-    title: "School Reconstruction Project",
-    desc: "Rebuilding a primary school destroyed in the floods to get 300 children back into classrooms.",
-    raised: "₹2,50,000",
-    goal: "₹5,00,000",
-    percent: "50%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  },
-  {
-    id: 2,
-    slug: "rural-mobile-clinic",
-    category: "Healthcare",
-    categoryColor: "bg-[#38BDF8]",
-    location: "Bhilwara, Rajasthan",
-    title: "Rural Mobile Clinic",
-    desc: "Providing weekly free medical checkups and essential medicines to 5 remote villages.",
-    raised: "₹1,20,000",
-    goal: "₹2,00,000",
-    percent: "60%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  },
-  {
-    id: 3,
-    slug: "womens-sewing-center",
-    category: "Women Empowerment",
-    badgeText: "Empowerment",
-    categoryColor: "bg-[#10B981]",
-    location: "Udaipur, Rajasthan",
-    title: "Women's Sewing Center",
-    desc: "Setting up a vocational training center with 20 sewing machines for local women to become financially independent.",
-    raised: "₹40,000",
-    goal: "₹1,50,000",
-    percent: "26%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  },
-  {
-    id: 4,
-    slug: "clean-drinking-water",
-    category: "Community",
-    categoryColor: "bg-[#F59E0B]",
-    location: "Jodhpur, Rajasthan",
-    title: "Clean Drinking Water",
-    desc: "Installation of a solar-powered water RO plant to supply clean water to 500 families.",
-    raised: "₹3,00,000",
-    goal: "₹3,00,000",
-    percent: "100%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  },
-  {
-    id: 5,
-    slug: "adult-literacy-campaign",
-    category: "Education",
-    categoryColor: "bg-[#3B82F6]",
-    location: "Jaipur Slums",
-    title: "Adult Literacy Campaign",
-    desc: "Three-month intensive literacy campaign targeting 100 adult men and women to teach them basic reading and math.",
-    raised: "₹15,000",
-    goal: "₹50,000",
-    percent: "30%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  },
-  {
-    id: 6,
-    slug: "sanitation-drives",
-    category: "Healthcare",
-    categoryColor: "bg-[#38BDF8]",
-    location: "Alwar, Rajasthan",
-    title: "Sanitation Drives",
-    desc: "Constructing 20 public toilets to improve sanitation and reduce disease outbreaks.",
-    raised: "₹80,000",
-    goal: "₹4,00,000",
-    percent: "20%",
-    image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"
-  }
-];
+// Mock data fallbacks have been removed in favor of real-time skeleton loading.
 
 export function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -94,7 +15,6 @@ export function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState("All Projects");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     fetchProjects();
   }, []);
 
@@ -105,17 +25,10 @@ export function ProjectsPage() {
       const res = await publicService.getProjects();
       const fetchedProjects = res.data.data;
       
-      // If there are no projects in the database, fallback to STATIC_PROJECTS for design demonstration
-      if (!fetchedProjects || fetchedProjects.length === 0) {
-        setProjects(STATIC_PROJECTS);
-      } else {
-        setProjects(fetchedProjects);
-      }
+      setProjects(fetchedProjects || []);
     } catch (err) {
       console.error("Failed to load projects", err);
       setError("Failed to load active projects. Please try again later.");
-      // Even on error, show static projects so the page isn't empty
-      setProjects(STATIC_PROJECTS);
     } finally {
       setLoading(false);
     }
@@ -176,14 +89,21 @@ export function ProjectsPage() {
         </div>
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center min-h-[400px]">
-            <Loader2 className="w-12 h-12 text-primary-blue animate-spin mb-4" />
-            <p className="text-text-secondary font-medium">Loading projects...</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10">
+            {[...Array(6)].map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
           </div>
         ) : error && projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[400px]">
             <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
             <p className="text-text-secondary font-medium">{error}</p>
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center min-h-[400px] py-20 text-center bg-white rounded-2xl border border-border-light shadow-sm">
+             <AlertCircle className="w-12 h-12 text-slate-300 mb-4" />
+             <h3 className="font-display text-xl font-bold text-text-dark">No Projects Found</h3>
+             <p className="font-sans text-text-secondary mt-2">We don't have any projects in this category at the moment.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-10">
@@ -196,6 +116,7 @@ export function ProjectsPage() {
                     src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"} 
                     alt={project.title} 
                     className="w-full h-full object-cover transition-transform duration-500" 
+                    loading="lazy"
                   />
                   <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm opacity-90 ${project.categoryColor || 'bg-primary-blue'}`}>
                     {project.badgeText || project.category}
