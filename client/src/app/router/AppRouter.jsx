@@ -13,8 +13,6 @@ import { AdminEventsList } from '@/pages/admin/events/AdminEventsList.jsx';
 import { AdminEventEditor } from '@/pages/admin/events/AdminEventEditor.jsx';
 import { AdminProjectsList } from '@/pages/admin/projects/AdminProjectsList.jsx';
 import { AdminProjectEditor } from '@/pages/admin/projects/AdminProjectEditor.jsx';
-import { AdminProgramsList } from '@/pages/admin/programs/AdminProgramsList.jsx';
-import { AdminProgramEditor } from '@/pages/admin/programs/AdminProgramEditor.jsx';
 import { AdminBlogsList } from '@/pages/admin/blogs/AdminBlogsList.jsx';
 import { AdminBlogEditor } from '@/pages/admin/blogs/AdminBlogEditor.jsx';
 import { AdminGalleryList } from '@/pages/admin/gallery/AdminGalleryList.jsx';
@@ -31,8 +29,6 @@ import { AdminNewsletterList } from '@/pages/admin/newsletter/AdminNewsletterLis
 
 // Public pages
 import { AboutPage } from '@/pages/public/AboutPage.jsx';
-import { ProgramsPage } from '@/pages/public/ProgramsPage.jsx';
-import { ProgramDetailsPage } from '@/pages/public/ProgramDetailsPage.jsx';
 import { ProjectsPage } from '@/pages/public/ProjectsPage.jsx';
 import { ProjectDetailsPage } from '@/pages/public/ProjectDetailsPage.jsx';
 import { EventsPage } from '@/pages/public/EventsPage.jsx';
@@ -91,11 +87,6 @@ export function AppRouter() {
             <Route path="projects" element={<AdminProjectsList />} />
             <Route path="projects/new" element={<AdminProjectEditor />} />
             <Route path="projects/:id/edit" element={<AdminProjectEditor />} />
-
-            {/* Programs */}
-            <Route path="programs" element={<AdminProgramsList />} />
-            <Route path="programs/new" element={<AdminProgramEditor />} />
-            <Route path="programs/:id/edit" element={<AdminProgramEditor />} />
 
             {/* Events */}
             <Route path="events" element={<AdminEventsList />} />

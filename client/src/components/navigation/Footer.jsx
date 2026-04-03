@@ -8,9 +8,17 @@ export function Footer() {
   const quickLinks = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
-    { name: 'Projects', path: '/projects' },
     { name: 'Gallery', path: '/gallery' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Testimonials', path: '/testimonials' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
+
+  const getInvolvedLinks = [
+    { name: 'Donate Now', path: '/donate' },
+    { name: 'Become a Volunteer', path: '/volunteer' },
+    { name: 'Our Projects', path: '/projects' },
+    { name: 'Upcoming Events', path: '/events' },
+    { name: 'Read Our Blog', path: '/blog' },
   ];
 
   const socialLinks = [
@@ -25,10 +33,10 @@ export function Footer() {
     <footer className="w-full bg-[#0F172A] px-6 py-[60px] pb-8 lg:px-20 lg:pt-[60px] lg:pb-8 flex flex-col gap-10">
       
       {/* Top Main Section */}
-      <div className="flex flex-col gap-12 lg:flex-row lg:gap-12 w-full justify-between">
+      <div className="flex flex-col gap-12 lg:flex-row lg:gap-8 w-full justify-between">
         
         {/* Column 1: Brand & Desc */}
-        <div className="flex flex-col gap-4 lg:w-[360px]">
+        <div className="flex flex-col gap-4 lg:w-[320px]">
           <Link to="/" className="flex items-center">
             <img 
               src="/uploads/logo.png" 
@@ -36,8 +44,8 @@ export function Footer() {
               className="h-16 lg:h-20 w-auto object-contain transition-opacity hover:opacity-90" 
             />
           </Link>
-          <p className="font-sans text-sm font-normal leading-[1.7] text-[#94A3B8] lg:w-[340px]">
-            A non-profit organization dedicated to empowering communities through education, healthcare, and sustainable development programs across India.
+          <p className="font-sans text-sm font-normal leading-[1.7] text-[#94A3B8]">
+            A non-profit organization dedicated to empowering communities through education, healthcare, and sustainable development projects across India.
           </p>
           <div className="flex items-center gap-3 pt-2">
             {socialLinks.map((social, idx) => {
@@ -56,9 +64,9 @@ export function Footer() {
         </div>
 
         {/* Column 2: Quick Links */}
-        <div className="flex flex-col gap-4">
-          <h3 className="font-display text-base font-semibold text-white">Quick Links</h3>
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-5">
+          <h3 className="font-display text-base font-semibold text-white tracking-wide">Quick Links</h3>
+          <div className="flex flex-col gap-3.5">
             {quickLinks.map((link) => (
               <Link
                 key={link.name}
@@ -71,26 +79,40 @@ export function Footer() {
           </div>
         </div>
 
-
+        {/* Column 3: Get Involved */}
+        <div className="flex flex-col gap-5">
+          <h3 className="font-display text-base font-semibold text-white tracking-wide">Get Involved</h3>
+          <div className="flex flex-col gap-3.5">
+            {getInvolvedLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className="font-sans text-sm font-normal text-[#94A3B8] transition-colors hover:text-white"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Column 4: Contact Info */}
-        <div className="flex flex-col gap-4">
-          <h3 className="font-display text-base font-semibold text-white">Contact Info</h3>
+        <div className="flex flex-col gap-5">
+          <h3 className="font-display text-base font-semibold text-white tracking-wide">Contact Info</h3>
           <div className="flex flex-col gap-4">
-            <address className="flex items-center gap-2 not-italic">
-              <MapPin className="h-3.5 w-3.5 text-accent-blue" />
-              <span className="font-sans text-sm font-normal text-[#94A3B8]">
-                Jaipur, Rajasthan, India
+            <address className="flex items-start gap-3 not-italic">
+              <MapPin className="h-4 w-4 text-accent-blue mt-0.5 shrink-0" />
+              <span className="font-sans text-sm font-normal text-[#94A3B8] leading-snug">
+                123, Foundation Street, Jaipur,<br /> Rajasthan, India - 302001
               </span>
             </address>
-            <a href="tel:+919876543210" className="flex items-center gap-2">
-              <Phone className="h-3.5 w-3.5 text-accent-blue" />
+            <a href="tel:+919876543210" className="flex items-center gap-3">
+              <Phone className="h-4 w-4 text-accent-blue shrink-0" />
               <span className="font-sans text-sm font-normal text-[#94A3B8] transition-colors hover:text-white">
                 +91 98765 43210
               </span>
             </a>
-            <a href="mailto:info@bhawnafoundation.org" className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5 text-accent-blue" />
+            <a href="mailto:info@bhawnafoundation.org" className="flex items-center gap-3">
+              <Mail className="h-4 w-4 text-accent-blue shrink-0" />
               <span className="font-sans text-sm font-normal text-[#94A3B8] transition-colors hover:text-white">
                 info@bhawnafoundation.org
               </span>
