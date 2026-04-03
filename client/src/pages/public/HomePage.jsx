@@ -60,7 +60,6 @@ export function HomePage() {
             src="https://images.unsplash.com/photo-1761039808159-f02b58f07032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc0ODV8&ixlib=rb-4.1.0&q=80&w=1080" 
             alt="Hero Background" 
             className="w-full h-full object-cover"
-            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -124,7 +123,6 @@ export function HomePage() {
               src="https://images.unsplash.com/photo-1590874023110-f82d4c63b599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
               alt="About Us"
               className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
-              loading="lazy"
             />
           </div>
           <div className="flex flex-col gap-5 w-full lg:flex-1">
@@ -194,7 +192,6 @@ export function HomePage() {
                       src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80"} 
                       alt={project.title} 
                       className="w-full h-full object-cover transition-transform duration-500" 
-                      loading="lazy"
                     />
                   </Link>
                   <div className="flex flex-col p-8 gap-4 flex-1">
@@ -383,7 +380,6 @@ export function HomePage() {
                       src={post.featuredImage || "https://images.unsplash.com/photo-1692269725911-87697c558be1?q=80&w=600"} 
                       alt={post.title} 
                       className="w-full h-full object-cover transition-transform" 
-                      loading="lazy"
                     />
                   </Link>
                   <div className="flex flex-col gap-2.5 p-6 w-full">
@@ -443,7 +439,6 @@ export function HomePage() {
             src="https://images.unsplash.com/photo-1636170310737-48abb9a69b2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc5OTh8&ixlib=rb-4.1.0&q=80&w=1080" 
             alt="CTA Background" 
             className="w-full h-full object-cover"
-            loading="lazy"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>

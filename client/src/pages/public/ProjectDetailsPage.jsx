@@ -101,7 +101,7 @@ export function ProjectDetailsPage() {
             className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             title="Click to view full image"
             onClick={() => window.open(mainImage, '_blank')}
-            loading="lazy"
+
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -179,7 +179,7 @@ export function ProjectDetailsPage() {
                       className="w-full aspect-square md:h-[140px] rounded-lg overflow-hidden group cursor-pointer relative bg-slate-50"
                       onClick={() => window.open(img, '_blank')}
                     >
-                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500" loading="lazy" />
+                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                         <ImageIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>

@@ -94,7 +94,7 @@ export function BlogPage() {
             {posts.map((post) => (
               <div key={post._id} className="flex flex-col bg-white rounded-2xl overflow-hidden border border-border-light shadow-sm hover:shadow-md transition-shadow group flex-1">
                 <Link to={`/blog/${post.slug}`} className="relative w-full aspect-video overflow-hidden shrink-0 bg-slate-50 block">
-                  <img src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=600"} alt={post.title} className="w-full h-full object-cover transition-transform duration-500" loading="lazy" />
+                  <img src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=600"} alt={post.title} className="w-full h-full object-cover transition-transform duration-500" />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-primary-blue font-sans text-[12px] font-bold rounded-full shadow-sm uppercase tracking-[0.5px]">
                       {post.category || 'News'}

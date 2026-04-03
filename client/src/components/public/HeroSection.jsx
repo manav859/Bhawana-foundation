@@ -50,7 +50,7 @@ export function HeroSection({
                   src={imageUrl}
                   alt={imageAlt || 'Hero visual'}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                  loading="lazy"
+
                 />
                 <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-brand-dark/10"></div>
               </div>

@@ -109,7 +109,7 @@ export function BlogDetailsPage() {
             src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200"} 
             alt={post.title} 
             className="w-full h-full object-cover transition-transform duration-700"
-            loading="lazy"
+
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
              <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>

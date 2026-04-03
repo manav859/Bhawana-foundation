@@ -12,7 +12,7 @@ export function AboutPage() {
             src="https://images.unsplash.com/photo-1723649388532-358b56dda065?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
             alt="About Hero Background" 
             className="w-full h-full object-cover object-center scale-105"
-            loading="lazy"
+
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -39,7 +39,7 @@ export function AboutPage() {
               src="https://images.unsplash.com/photo-1653508310086-bd5f097286ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
               alt="Our Story"
               className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-700"
-              loading="lazy"
+
             />
           </div>
           <div className="flex flex-col gap-5 w-full lg:flex-1">
@@ -243,7 +243,7 @@ export function AboutPage() {
                   src="/uploads/yash.png" 
                   alt="Yash Malviya" 
                   className="w-full h-full object-contain bg-light-blue/20 transition-transform duration-500" 
-                  loading="lazy"
+
                 />
               </div>
               <div className="flex flex-col gap-2">

@@ -116,7 +116,7 @@ export function ProjectsPage() {
                     src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"} 
                     alt={project.title} 
                     className="w-full h-full object-cover transition-transform duration-500" 
-                    loading="lazy"
+
                   />
                   <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm opacity-90 ${project.categoryColor || 'bg-primary-blue'}`}>
                     {project.badgeText || project.category}

@@ -148,7 +148,7 @@ export function GalleryPage() {
                         onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
                       />
                     ) : (
-                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" loading="lazy" />
+                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" />
                     )}
                     
                     {/* Overlay */}

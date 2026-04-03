@@ -13,7 +13,7 @@ export function ProgramCard({ program }) {
           src={imageUrl}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
+
         />
         <div className="absolute inset-0 ring-1 ring-inset ring-brand-dark/10"></div>
       </div>

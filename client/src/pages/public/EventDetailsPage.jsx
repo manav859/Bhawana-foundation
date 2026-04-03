@@ -76,7 +76,7 @@ export function EventDetailsPage() {
             className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
             title="Click to view full image"
             onClick={() => window.open(event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1080", '_blank')}
-            loading="lazy"
+
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -129,7 +129,7 @@ export function EventDetailsPage() {
                   src={event.image} 
                   alt={event.title}
                   className="w-full h-auto object-cover max-h-[500px] group-hover:scale-[1.02] transition-transform duration-500"
-                  loading="lazy"
+
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                    <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>
@@ -210,7 +210,7 @@ export function EventDetailsPage() {
               <h3 className="font-display text-[16px] font-bold text-text-dark mb-4">Organization</h3>
               <div className="flex items-center gap-3">
                 <div className="w-20 h-20 rounded-full overflow-hidden shrink-0 border border-border-light flex items-center justify-center bg-white p-2">
-                   <img src="/uploads/logo.png" alt="Bhawna Foundation" className="max-w-full max-h-full object-contain" loading="lazy" />
+                   <img src="/uploads/logo.png" alt="Bhawna Foundation" className="max-w-full max-h-full object-contain" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-sans text-[14px] font-bold text-text-dark">Bhawna Foundation</span>
