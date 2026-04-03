@@ -1,43 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Calendar as CalendarIcon, MapPin, Clock } from 'lucide-react';
+import { publicService } from '@/features/api/services/public.service.js';
 
 const categories = ["Upcoming", "Past"];
 
 export function EventsPage() {
   const [activeTab, setActiveTab] = useState("Upcoming");
+  const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Using static events matching the screenshot for design demonstration
-  const events = [
-    {
-      id: 1,
-      title: "Annual School Kit Distribution",
-      category: "Education Drive",
-      date: { month: "OCT", day: "15" },
-      time: "10:00 AM - 2:00 PM",
-      location: "Govt. Primary School, Dharavi",
-      status: "upcoming",
-      buttonText: "Register",
-      buttonStyle: "filled"
-    },
-    {
-      id: 2,
-      title: "Free Basic Checkup for Farmers",
-      category: "Health Camp",
-      date: { month: "NOV", day: "02" },
-      time: "08:00 AM - 5:00 PM",
-      location: "Community Hall, Palghar",
-      status: "upcoming",
-      buttonText: "Learn More",
-      buttonStyle: "outlined"
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        setIsLoading(true);
+        const res = await publicService.getEvents();
+        setEvents(res.data?.data || []);
+      } catch (error) {
+        console.error('Failed to fetch events:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  ];
+    fetchEvents();
+  }, []);
 
   const filteredEvents = events.filter(e => {
     if (activeTab === "Upcoming") return e.status === "upcoming";
     if (activeTab === "Past") return e.status === "past";
     return true;
   });
+
+  if (isLoading) {
+    return (
+      <main className="flex flex-col w-full bg-bg-light min-h-screen py-20 items-center justify-center">
+        <div className="text-text-secondary text-lg">Loading events...</div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
@@ -105,20 +105,33 @@ export function EventsPage() {
             ) : (
               filteredEvents.map((event) => (
                 <div 
-                  key={event.id} 
+                  key={event.id || event._id} 
                   className="flex flex-col md:flex-row items-center bg-white rounded-[24px] p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow border border-border-light/50 gap-6 lg:gap-10"
                 >
+                  {/* Image Container */}
+                  <div className="w-full md:w-[240px] aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-slate-50 shrink-0">
+                    <img 
+                      src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600"} 
+                      alt={event.title} 
+                      className="w-full h-full object-cover transition-transform duration-500" 
+                    />
+                  </div>
+
                   {/* Date Display */}
-                  <div className="flex flex-col items-center justify-center min-w-[100px] shrink-0 border-b md:border-b-0 md:border-r border-border-light pb-4 md:pb-0 md:pr-10">
-                    <span className="font-sans text-[16px] font-bold text-primary-blue uppercase tracking-wider">{event.date.month}</span>
-                    <span className="font-display text-[48px] font-bold text-text-dark leading-none mt-1">{event.date.day}</span>
+                  <div className="flex flex-col items-center justify-center min-w-[80px] shrink-0 border-b md:border-b-0 md:border-r border-border-light pb-4 md:pb-0 md:pr-8">
+                    <span className="font-sans text-[14px] font-bold text-primary-blue uppercase tracking-wider">
+                      {event.date ? new Date(event.date).toLocaleString('en-US', { month: 'short' }).toUpperCase() : 'TBA'}
+                    </span>
+                    <span className="font-display text-[36px] font-bold text-text-dark leading-none mt-1">
+                      {event.date ? new Date(event.date).getDate().toString().padStart(2, '0') : '--'}
+                    </span>
                   </div>
 
                   {/* Info Section */}
                   <div className="flex flex-col flex-1 gap-3">
                     <div className="flex items-center">
                       <span className="px-4 py-1.5 bg-blue-50 text-primary-blue font-sans text-[12px] font-bold rounded-full border border-blue-100">
-                        {event.category}
+                        {event.category || 'General'}
                       </span>
                     </div>
                     <h3 className="font-display text-[22px] lg:text-[28px] font-bold text-text-dark leading-tight">
@@ -127,11 +140,11 @@ export function EventsPage() {
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-1">
                       <div className="flex items-center gap-2 text-text-secondary">
                         <Clock className="w-4 h-4 opacity-70" />
-                        <span className="font-sans text-[14px] font-medium">{event.time}</span>
+                        <span className="font-sans text-[14px] font-medium">{event.time || 'TBA'}</span>
                       </div>
                       <div className="flex items-center gap-2 text-text-secondary">
                         <MapPin className="w-4 h-4 opacity-70" />
-                        <span className="font-sans text-[14px] font-medium">{event.location}</span>
+                        <span className="font-sans text-[14px] font-medium">{event.location || 'TBA'}</span>
                       </div>
                     </div>
                   </div>
@@ -139,11 +152,11 @@ export function EventsPage() {
                   {/* Action Section */}
                   <div className="shrink-0 w-full md:w-auto mt-4 md:mt-0">
                     <button className={`w-full md:w-[150px] py-3 rounded-xl font-sans text-[15px] font-bold transition-all duration-300 ${
-                      event.buttonStyle === 'filled'
+                      (event.buttonStyle || (activeTab === 'Upcoming' ? 'filled' : 'outlined')) === 'filled'
                         ? 'bg-primary-blue text-white hover:bg-blue-700 shadow-md'
                         : 'border border-primary-blue text-primary-blue hover:bg-primary-blue/5'
                     }`}>
-                      {event.buttonText}
+                      {event.buttonText || (activeTab === 'Upcoming' ? 'Register' : 'Learn More')}
                     </button>
                   </div>
                 </div>

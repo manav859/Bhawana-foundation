@@ -131,19 +131,21 @@ export function GalleryPage() {
                 return (
                   <div 
                     key={item._id} 
-                    className="relative w-full aspect-square rounded-[24px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 bg-gray-100"
+                    className="relative w-full aspect-square rounded-[24px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-50"
+                    onClick={() => window.open(item.image, '_blank')}
+                    title="Click to view full image"
                   >
                     {type === 'video' ? (
                       <video 
                         src={item.image} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                        className="w-full h-full object-cover transition-transform duration-700" 
                         muted 
                         loop 
                         onMouseEnter={(e) => e.target.play()} 
                         onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
                       />
                     ) : (
-                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" />
                     )}
                     
                     {/* Overlay */}

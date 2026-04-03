@@ -37,6 +37,9 @@ export const publicService = {
   getTestimonials(params) {
     return http.get('/testimonials', { params });
   },
+  submitTestimonial(data) {
+    return http.post('/testimonials/submit', data);
+  },
   getPartners(params) {
     return http.get('/partners', { params });
   },

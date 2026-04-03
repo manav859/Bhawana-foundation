@@ -8,7 +8,7 @@ export function AdminLoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const [form, setForm] = useState({ email: 'admin@bhawnafoundation.org', password: 'Admin@123' });
+  const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 

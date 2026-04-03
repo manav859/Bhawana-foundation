@@ -37,6 +37,7 @@ import { ProjectDetailsPage } from '@/pages/public/ProjectDetailsPage.jsx';
 import { EventsPage } from '@/pages/public/EventsPage.jsx';
 import { EventDetailsPage } from '@/pages/public/EventDetailsPage.jsx';
 import { GalleryPage } from '@/pages/public/GalleryPage.jsx';
+import { TestimonialsPage } from '@/pages/public/TestimonialsPage.jsx';
 import { DonationPage } from '@/pages/public/DonationPage.jsx';
 import { VolunteerPage } from '@/pages/public/VolunteerPage.jsx';
 import { BlogPage } from '@/pages/public/BlogPage.jsx';
@@ -56,13 +57,13 @@ export function AppRouter() {
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="programs" element={<ProgramsPage />} />
-          <Route path="programs/:slug" element={<ProgramDetailsPage />} />
+
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/:slug" element={<ProjectDetailsPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="events/:slug" element={<EventDetailsPage />} />
           <Route path="gallery" element={<GalleryPage />} />
+          <Route path="testimonials" element={<TestimonialsPage />} />
           <Route path="donate" element={<DonationPage />} />
           <Route path="donation" element={<DonationPage />} />
           <Route path="donote" element={<DonationPage />} />

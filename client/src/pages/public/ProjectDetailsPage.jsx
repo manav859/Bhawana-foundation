@@ -83,7 +83,9 @@ export function ProjectDetailsPage() {
           <img 
             src={mainImage} 
             alt={project.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+            title="Click to view full image"
+            onClick={() => window.open(mainImage, '_blank')}
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -156,8 +158,12 @@ export function ProjectDetailsPage() {
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
                   {project.images.slice(1, 4).map((img, idx) => (
-                    <div key={idx} className="w-full h-[140px] rounded-lg overflow-hidden group cursor-pointer relative">
-                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <div 
+                      key={idx} 
+                      className="w-full aspect-square md:h-[140px] rounded-lg overflow-hidden group cursor-pointer relative bg-slate-50"
+                      onClick={() => window.open(img, '_blank')}
+                    >
+                      <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
                         <ImageIcon className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>

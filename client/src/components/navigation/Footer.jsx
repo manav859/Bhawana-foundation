@@ -8,19 +8,9 @@ export function Footer() {
   const quickLinks = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
-    { name: 'Programs', path: '/programs' },
     { name: 'Projects', path: '/projects' },
     { name: 'Gallery', path: '/gallery' },
     { name: 'Contact', path: '/contact' },
-  ];
-
-  const programs = [
-    { name: 'Education', path: '/programs' },
-    { name: 'Healthcare', path: '/programs' },
-    { name: 'Women Empowerment', path: '/programs' },
-    { name: 'Community Development', path: '/programs' },
-    { name: 'Volunteer', path: '/volunteer' },
-    { name: 'Donate', path: '/donate' },
   ];
 
   const socialLinks = [
@@ -81,21 +71,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Column 3: Programs */}
-        <div className="flex flex-col gap-4">
-          <h3 className="font-display text-base font-semibold text-white">Programs</h3>
-          <div className="flex flex-col gap-4">
-            {programs.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className="font-sans text-sm font-normal text-[#94A3B8] transition-colors hover:text-white"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-        </div>
+
 
         {/* Column 4: Contact Info */}
         <div className="flex flex-col gap-4">

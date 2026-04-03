@@ -19,6 +19,18 @@ export const getTestimonials = catchAsync(async (req, res) => {
   sendResponse(res, { data, meta: buildPaginationMeta(total, page, limit), message: 'Testimonials fetched successfully.' });
 });
 
+/** POST /testimonials/submit (public) */
+export const submitTestimonial = catchAsync(async (req, res) => {
+  const { name, role, quote } = req.body;
+  const testimonial = await Testimonial.create({
+    name,
+    role,
+    quote,
+    isFeatured: false, // Ensure public submissions are never featured by default
+  });
+  sendResponse(res, { statusCode: 201, data: testimonial, message: 'Testimonial submitted successfully.' });
+});
+
 /** GET /testimonials/:id */
 export const getTestimonial = catchAsync(async (req, res) => {
   const testimonial = await Testimonial.findById(req.params.id);

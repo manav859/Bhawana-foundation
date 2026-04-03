@@ -5,7 +5,7 @@ export function Card({ children, className = '', onClick, image, imageAlt }) {
       className={`bg-white rounded-2xl border border-border-light shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg ${onClick ? 'cursor-pointer hover:-translate-y-1' : ''} ${className}`}
     >
       {image && (
-        <div className="w-full h-[200px] overflow-hidden">
+        <div className="w-full aspect-video overflow-hidden bg-slate-50">
           <img
             src={image}
             alt={imageAlt || ''}

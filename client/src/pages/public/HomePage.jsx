@@ -8,10 +8,14 @@ import {
 } from 'lucide-react';
 import { publicService } from '@/features/api/services/public.service.js';
 import { formatDate } from '@/utils/format.js';
+import { SubmitTestimonialModal } from '@/components/common/SubmitTestimonialModal.jsx';
 
 export function HomePage() {
   const [featuredProjects, setFeaturedProjects] = useState([]);
   const [recentEvents, setRecentEvents] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [isTestimonialModalOpen, setIsTestimonialModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,12 +25,23 @@ export function HomePage() {
   const fetchHomeData = async () => {
     try {
       setLoading(true);
-      const [projectsRes, eventsRes] = await Promise.all([
+      const [projectsRes, eventsRes, testimonialsRes, postsRes] = await Promise.all([
         publicService.getProjects({ limit: 3 }),
-        publicService.getEvents({ limit: 3 })
+        publicService.getEvents({ limit: 3 }),
+        publicService.getTestimonials({ featured: true, limit: 3 }),
+        publicService.getPosts({ status: 'published', limit: 3 })
       ]);
       setFeaturedProjects(projectsRes.data.data || []);
       setRecentEvents(eventsRes.data.data || []);
+      setRecentPosts(postsRes.data.data || []);
+      
+      // If we don't have featured testimonials, fallback to getting newest
+      if (testimonialsRes.data.data && testimonialsRes.data.data.length > 0) {
+         setTestimonials(testimonialsRes.data.data);
+      } else {
+         const latestRes = await publicService.getTestimonials({ limit: 3 });
+         setTestimonials(latestRes.data.data || []);
+      }
     } catch (err) {
       console.error("Failed to load home page data", err);
     } finally {
@@ -102,11 +117,11 @@ export function HomePage() {
       {/* 3. About Preview */}
       <section className="w-full bg-bg-light px-6 py-[60px] lg:px-20 lg:py-[80px]">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-[60px] max-w-[1440px] mx-auto">
-          <div className="w-full lg:w-[560px] h-[280px] lg:h-[400px] shrink-0 rounded-2xl overflow-hidden shadow-lg">
+          <div className="w-full lg:w-[560px] aspect-[16/10] shrink-0 rounded-2xl overflow-hidden shadow-lg bg-slate-50">
             <img 
-              src="https://images.unsplash.com/photo-1590874023110-f82d4c63b599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc1MjN8&ixlib=rb-4.1.0&q=80&w=1080" 
+              src="https://images.unsplash.com/photo-1590874023110-f82d4c63b599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
               alt="About Us"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
             />
           </div>
           <div className="flex flex-col gap-5 w-full lg:flex-1">
@@ -142,99 +157,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* 4. Programs Preview */}
-      <section className="w-full bg-white px-6 py-[60px] lg:px-20 lg:py-[80px]">
-        <div className="flex flex-col gap-10 lg:gap-12 max-w-[1440px] mx-auto">
-          <div className="flex flex-col gap-3 lg:w-[600px] mx-auto items-center">
-            <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-light-blue rounded-full w-fit">
-              <Layers className="w-3.5 h-3.5 text-primary-blue shrink-0" />
-              <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Our Programs</span>
-            </div>
-            <h2 className="font-display text-[26px] lg:text-[36px] font-bold text-text-dark text-center leading-[1.2]">
-              Programs That Create Impact
-            </h2>
-            <p className="font-sans text-[15px] lg:text-[16px] font-normal text-text-secondary text-center leading-[1.6]">
-              We run focused programs across education, healthcare, women empowerment, and community development.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            {/* Education Card */}
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[180px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1602542164986-edc061d9c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc2MjN8&ixlib=rb-4.1.0&q=80&w=600" alt="Education" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-3 p-6 w-full">
-                <div className="flex items-center justify-center w-11 h-11 bg-light-blue rounded-[10px]">
-                  <BookOpen className="w-[22px] h-[22px] text-primary-blue" />
-                </div>
-                <h3 className="font-display text-[20px] font-semibold text-text-dark">Education</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Providing quality education and learning resources to underprivileged children across rural India.</p>
-                <Link to="/programs" className="flex items-center gap-1.5 mt-1 group/link">
-                  <span className="font-sans text-[14px] font-semibold text-primary-blue">Learn More</span>
-                  <ArrowRight className="w-[14px] h-[14px] text-primary-blue transition-transform group-hover/link:translate-x-1" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Healthcare Card */}
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[180px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1576089172869-4f5f6f315620?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4OTc3OTN8&ixlib=rb-4.1.0&q=80&w=600" alt="Healthcare" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-3 p-6 w-full">
-                <div className="flex items-center justify-center w-11 h-11 bg-red-50 rounded-[10px]">
-                  <HeartPulse className="w-[22px] h-[22px] text-coral-red" />
-                </div>
-                <h3 className="font-display text-[20px] font-semibold text-text-dark">Healthcare</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Organizing medical camps and health awareness drives in rural and underserved communities.</p>
-                <Link to="/programs" className="flex items-center gap-1.5 mt-1 group/link">
-                  <span className="font-sans text-[14px] font-semibold text-primary-blue">Learn More</span>
-                  <ArrowRight className="w-[14px] h-[14px] text-primary-blue transition-transform group-hover/link:translate-x-1" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Women Empowerment Card */}
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[180px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1623121608226-ca93dec4d94e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc2OTB8&ixlib=rb-4.1.0&q=80&w=600" alt="Women Empowerment" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-3 p-6 w-full">
-                <div className="flex items-center justify-center w-11 h-11 bg-fuchsia-50 rounded-[10px]">
-                  <Sparkles className="w-[22px] h-[22px] text-purple-500" />
-                </div>
-                <h3 className="font-display text-[20px] font-semibold text-text-dark">Women Empowerment</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Empowering women through skill development, financial literacy, and leadership training programs.</p>
-                <Link to="/programs" className="flex items-center gap-1.5 mt-1 group/link">
-                  <span className="font-sans text-[14px] font-semibold text-primary-blue">Learn More</span>
-                  <ArrowRight className="w-[14px] h-[14px] text-primary-blue transition-transform group-hover/link:translate-x-1" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Community Development Card */}
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[180px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1766059965300-8ada347134cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc2OTB8&ixlib=rb-4.1.0&q=80&w=600" alt="Community Development" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-3 p-6 w-full">
-                <div className="flex items-center justify-center w-11 h-11 bg-orange-50 rounded-[10px]">
-                  <Home className="w-[22px] h-[22px] text-warm-orange" />
-                </div>
-                <h3 className="font-display text-[20px] font-semibold text-text-dark">Community Development</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Building sustainable infrastructure and creating opportunities for economic growth in communities.</p>
-                <Link to="/programs" className="flex items-center gap-1.5 mt-1 group/link">
-                  <span className="font-sans text-[14px] font-semibold text-primary-blue">Learn More</span>
-                  <ArrowRight className="w-[14px] h-[14px] text-primary-blue transition-transform group-hover/link:translate-x-1" />
-                </Link>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
 
       {/* 5. Featured Projects */}
       <section className="w-full bg-bg-light px-6 py-[60px] lg:px-20 lg:py-[80px]">
@@ -289,11 +212,11 @@ export function HomePage() {
               }
             ]).map((project, idx) => (
               <div key={project._id || idx} className="flex flex-col rounded-xl overflow-hidden bg-white shadow-sm border border-slate-100 group hover:shadow-md transition-all duration-300">
-                <Link to={`/projects/${project.slug}`} className="w-full h-[220px] overflow-hidden">
+                <Link to={`/projects/${project.slug}`} className="w-full aspect-video overflow-hidden bg-slate-50 block">
                   <img 
                     src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80"} 
                     alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                    className="w-full h-full object-cover transition-transform duration-500" 
                   />
                 </Link>
                 <div className="flex flex-col p-8 gap-4 flex-1">
@@ -341,62 +264,68 @@ export function HomePage() {
       {/* 6. Testimonials */}
       <section className="w-full bg-white px-6 py-[60px] lg:px-20 lg:py-[80px] border-t border-border-light">
         <div className="flex flex-col gap-10 lg:gap-12 max-w-[1440px] mx-auto">
-          <div className="flex flex-col gap-3 lg:w-[600px] items-center mx-auto">
-            <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-light-blue rounded-full w-fit">
-              <MessageCircle className="w-3.5 h-3.5 text-primary-blue shrink-0" />
-              <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Testimonials</span>
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col gap-3 lg:w-[600px] items-center lg:items-start text-center lg:text-left">
+              <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-light-blue rounded-full w-fit">
+                <MessageCircle className="w-3.5 h-3.5 text-primary-blue shrink-0" />
+                <span className="font-sans text-[12px] font-bold tracking-[1px] text-primary-blue uppercase">Testimonials</span>
+              </div>
+              <h2 className="font-display text-[26px] lg:text-[36px] font-bold text-text-dark leading-[1.2]">
+                What People Say About Us
+              </h2>
             </div>
-            <h2 className="font-display text-[26px] lg:text-[36px] font-bold text-text-dark text-center leading-[1.2]">
-              What People Say About Us
-            </h2>
+            <div className="flex items-center gap-4">
+               <button 
+                onClick={() => setIsTestimonialModalOpen(true)}
+                className="px-5 py-2.5 bg-primary-blue text-white rounded-lg font-sans text-[14px] font-semibold hover:bg-primary-blue/90 transition-colors shadow-sm"
+              >
+                Add Testimonial
+              </button>
+              <Link to="/testimonials" className="flex items-center gap-1.5 px-6 py-2.5 border-[1.5px] border-primary-blue rounded-lg group hover:bg-primary-blue transition-colors text-primary-blue">
+                <span className="font-sans text-[14px] font-semibold group-hover:text-white">View All</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:text-white" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative">
-              <Quote className="w-8 h-8 text-primary-blue/30" />
-              <p className="font-sans text-[15px] font-normal text-text-dark leading-[1.7] italic">
-                “Bhawna Foundation changed my daughter's life. She now has access to quality education and dreams of becoming a doctor. We are forever grateful.”
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-11 h-11 bg-primary-blue rounded-full text-white font-sans text-base font-semibold">
-                  RS
+             {testimonials.length > 0 ? (
+               testimonials.map((testimonial, idx) => {
+                  const colors = [
+                    { text: 'text-primary-blue', bg: 'bg-primary-blue' },
+                    { text: 'text-accent-blue', bg: 'bg-accent-blue' },
+                    { text: 'text-success-green', bg: 'bg-success-green' }
+                  ];
+                  const color = colors[idx % colors.length];
+                  return (
+                    <div key={testimonial._id} className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative">
+                      <Quote className={`w-8 h-8 ${color.text}/30`} />
+                      <p className="font-sans text-[15px] font-normal text-text-dark leading-[1.7] italic flex-1">
+                        “{testimonial.quote}”
+                      </p>
+                      <div className="flex items-center gap-3 pt-2">
+                        {testimonial.image ? (
+                          <img src={testimonial.image} alt={testimonial.name} className="w-11 h-11 rounded-full object-cover" />
+                        ) : (
+                          <div className={`flex items-center justify-center w-11 h-11 ${color.bg} rounded-full text-white font-sans text-base font-semibold uppercase`}>
+                            {testimonial.name[0]}
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <span className="font-sans text-[14px] font-semibold text-text-dark">{testimonial.name}</span>
+                          {testimonial.role && <span className="font-sans text-[13px] font-normal text-text-secondary">{testimonial.role}</span>}
+                        </div>
+                      </div>
+                    </div>
+                  );
+               })
+             ) : (
+                <div className="col-span-1 md:col-span-3 flex flex-col items-center justify-center py-16 text-center bg-bg-light rounded-xl border border-border-light">
+                  <MessageCircle className="w-10 h-10 text-slate-300 mb-3" />
+                  <h3 className="font-display text-lg font-semibold text-text-dark">No Testimonials Yet</h3>
+                  <p className="font-sans text-text-secondary">Be the first to share your experience with us!</p>
                 </div>
-                <div className="flex flex-col">
-                  <span className="font-sans text-[14px] font-semibold text-text-dark">Rekha Sharma</span>
-                  <span className="font-sans text-[13px] font-normal text-text-secondary">Parent, Jaipur</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative">
-              <Quote className="w-8 h-8 text-accent-blue/30" />
-              <p className="font-sans text-[15px] font-normal text-text-dark leading-[1.7] italic">
-                “Volunteering with Bhawna Foundation has been the most rewarding experience. The team's dedication to community development is truly inspiring.”
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-11 h-11 bg-accent-blue rounded-full text-white font-sans text-base font-semibold">
-                  AK
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-sans text-[14px] font-semibold text-text-dark">Amit Kumar</span>
-                  <span className="font-sans text-[13px] font-normal text-text-secondary">Volunteer, Delhi</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative">
-              <Quote className="w-8 h-8 text-success-green/30" />
-              <p className="font-sans text-[15px] font-normal text-text-dark leading-[1.7] italic">
-                “The healthcare camps organized by Bhawna Foundation provided free medical check-ups for our entire village. They truly care about the well-being of people.”
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-11 h-11 bg-success-green rounded-full text-white font-sans text-base font-semibold">
-                  PM
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-sans text-[14px] font-semibold text-text-dark">Priya Mehra</span>
-                  <span className="font-sans text-[13px] font-normal text-text-secondary">Beneficiary, Udaipur</span>
-                </div>
-              </div>
-            </div>
+             )}
           </div>
         </div>
       </section>
@@ -451,39 +380,37 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[200px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1692269725911-87697c558be1?q=80&w=600" alt="Blog 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+            {recentPosts.length > 0 ? (
+              recentPosts.map((post) => (
+                <div key={post._id} className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
+                  <Link to={`/blog/${post.slug}`} className="w-full aspect-video overflow-hidden bg-slate-50 block">
+                    <img 
+                      src={post.featuredImage || "https://images.unsplash.com/photo-1692269725911-87697c558be1?q=80&w=600"} 
+                      alt={post.title} 
+                      className="w-full h-full object-cover transition-transform" 
+                    />
+                  </Link>
+                  <div className="flex flex-col gap-2.5 p-6 w-full">
+                    <span className="font-sans text-[12px] font-medium text-text-muted">
+                      {formatDate(post.createdAt)}
+                    </span>
+                    <h3 className="font-display text-[18px] font-semibold text-text-dark leading-[1.3] group-hover:text-primary-blue transition-colors">
+                      <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                    </h3>
+                    <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6] line-clamp-3">
+                      {post.excerpt || (post.content ? post.content.substring(0, 120) + '...' : '')}
+                    </p>
+                    <Link to={`/blog/${post.slug}`} className="font-sans text-[14px] font-semibold text-primary-blue mt-1">Read More &rarr;</Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-1 md:col-span-3 py-12 flex flex-col items-center justify-center bg-bg-light rounded-xl border border-border-light text-center">
+                <BookOpen className="w-10 h-10 text-slate-300 mb-3" />
+                <h3 className="font-display text-lg font-semibold text-text-dark">No Posts Yet</h3>
+                <p className="font-sans text-text-secondary">Our latest stories will appear here soon.</p>
               </div>
-              <div className="flex flex-col gap-2.5 p-6 w-full">
-                <span className="font-sans text-[12px] font-medium text-text-muted">March 15, 2026</span>
-                <h3 className="font-display text-[18px] font-semibold text-text-dark leading-[1.3]">How Education Breaks the Cycle of Poverty</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Discover how our education programs are transforming lives and creating pathways to a brighter future...</p>
-                <Link to="/blog" className="font-sans text-[14px] font-semibold text-primary-blue mt-1">Read More &rarr;</Link>
-              </div>
-            </div>
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[200px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1774050021883-b711be066448?q=80&w=600" alt="Blog 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-2.5 p-6 w-full">
-                <span className="font-sans text-[12px] font-medium text-text-muted">March 8, 2026</span>
-                <h3 className="font-display text-[18px] font-semibold text-text-dark leading-[1.3]">Healthcare Camps Reach 5,000 People in Rural Areas</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Our mobile healthcare units bring essential medical services to remote villages with limited access...</p>
-                <Link to="/blog" className="font-sans text-[14px] font-semibold text-primary-blue mt-1">Read More &rarr;</Link>
-              </div>
-            </div>
-            <div className="flex flex-col rounded-xl overflow-hidden border border-border-light bg-white group hover:shadow-lg transition-shadow">
-              <div className="w-full h-[200px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1609126385558-bc3fc5082b0a?q=80&w=600" alt="Blog 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-              </div>
-              <div className="flex flex-col gap-2.5 p-6 w-full">
-                <span className="font-sans text-[12px] font-medium text-text-muted">February 28, 2026</span>
-                <h3 className="font-display text-[18px] font-semibold text-text-dark leading-[1.3]">Women Entrepreneurs: Success Stories from Our Programs</h3>
-                <p className="font-sans text-[14px] font-normal text-text-secondary leading-[1.6]">Meet the incredible women who transformed their lives through our skill development initiatives...</p>
-                <Link to="/blog" className="font-sans text-[14px] font-semibold text-primary-blue mt-1">Read More &rarr;</Link>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -543,6 +470,11 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Modals */}
+      <SubmitTestimonialModal 
+        isOpen={isTestimonialModalOpen} 
+        onClose={() => setIsTestimonialModalOpen(false)} 
+      />
     </main>
   );
 }

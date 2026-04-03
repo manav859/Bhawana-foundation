@@ -59,7 +59,9 @@ export function EventDetailsPage() {
           <img 
             src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1080"} 
             alt={event.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+            title="Click to view full image"
+            onClick={() => window.open(event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1080", '_blank')}
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -104,15 +106,19 @@ export function EventDetailsPage() {
             </div>
 
             {/* Event Media Gallery could go here in future */}
-            {event.image && (
-              <div className="w-full rounded-xl overflow-hidden mt-4">
+              <div 
+                className="w-full rounded-xl overflow-hidden mt-4 bg-slate-50 cursor-pointer group relative"
+                onClick={() => window.open(event.image, '_blank')}
+              >
                 <img 
                   src={event.image} 
                   alt={event.title}
-                  className="w-full h-auto object-cover max-h-[500px]"
+                  className="w-full h-auto object-cover max-h-[500px] group-hover:scale-[1.02] transition-transform duration-500"
                 />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                   <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>
+                </div>
               </div>
-            )}
 
             <div className="flex items-center gap-4 pt-6 border-t border-border-light mt-4">
               <span className="font-sans text-[14px] font-semibold text-text-dark">Share this event:</span>

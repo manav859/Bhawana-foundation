@@ -191,13 +191,13 @@ export function ProjectsPage() {
               <div key={project._id || project.id} className="flex flex-col bg-white rounded-[16px] overflow-hidden border border-border-light shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
                 
                 {/* Card Image */}
-                <Link to={`/projects/${project.slug}`} className="relative w-full h-[220px] overflow-hidden">
+                <Link to={`/projects/${project.slug}`} className="relative w-full aspect-video overflow-hidden bg-slate-50 block">
                   <img 
                     src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"} 
                     alt={project.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    className="w-full h-full object-cover transition-transform duration-500" 
                   />
-                  <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm ${project.categoryColor || 'bg-primary-blue'}`}>
+                  <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm opacity-90 ${project.categoryColor || 'bg-primary-blue'}`}>
                     {project.badgeText || project.category}
                   </div>
                 </Link>

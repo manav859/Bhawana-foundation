@@ -92,12 +92,15 @@ export function BlogDetailsPage() {
 
       {/* 2. Featured Image */}
       <section className="w-full px-6 lg:px-[120px] max-w-[1200px] mx-auto mt-8">
-        <div className="w-full h-[300px] lg:h-[500px] rounded-2xl overflow-hidden shadow-sm">
+        <div className="w-full h-[300px] lg:h-[500px] rounded-2xl overflow-hidden shadow-sm bg-slate-50 cursor-pointer group relative" onClick={() => window.open(post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200", '_blank')}>
           <img 
-            src={post.featuredImage || "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200"} 
+            src={post.featuredImage || "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200"} 
             alt={post.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-700"
           />
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+             <span className="text-white opacity-0 group-hover:opacity-100 font-sans text-sm font-semibold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">View Full Image</span>
+          </div>
         </div>
       </section>
 

@@ -3,12 +3,14 @@ import { requireAdminAuth } from '../../middlewares/auth.middleware.js';
 import {
   getTestimonials, getTestimonial,
   createTestimonial, updateTestimonial, deleteTestimonial,
+  submitTestimonial,
 } from './testimonials.controller.js';
 
 export const testimonialsRouter = express.Router();
 
 // Public
 testimonialsRouter.get('/', getTestimonials);
+testimonialsRouter.post('/submit', submitTestimonial);
 
 // Admin
 testimonialsRouter.get('/admin/all', requireAdminAuth, getTestimonials);

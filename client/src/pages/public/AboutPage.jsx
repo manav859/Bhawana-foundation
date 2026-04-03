@@ -9,9 +9,9 @@ export function AboutPage() {
       <section className="relative w-full h-[340px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1723649388532-358b56dda065?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODgwOTl8&ixlib=rb-4.1.0&q=80&w=1080" 
+            src="https://images.unsplash.com/photo-1723649388532-358b56dda065?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
             alt="About Hero Background" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center scale-105"
           />
           <div className="absolute inset-0 bg-black/65" />
         </div>
@@ -35,9 +35,9 @@ export function AboutPage() {
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-[60px] max-w-[1440px] mx-auto">
           <div className="w-full lg:w-[520px] h-[280px] lg:h-[380px] shrink-0 rounded-2xl overflow-hidden shadow-lg">
             <img 
-              src="https://images.unsplash.com/photo-1653508310086-bd5f097286ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODgxMTN8&ixlib=rb-4.1.0&q=80&w=1080" 
+              src="https://images.unsplash.com/photo-1653508310086-bd5f097286ac?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
               alt="Our Story"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 transition-all duration-700"
             />
           </div>
           <div className="flex flex-col gap-5 w-full lg:flex-1">
@@ -240,7 +240,7 @@ export function AboutPage() {
                 <img 
                   src="/uploads/yash.png" 
                   alt="Yash Malviya" 
-                  className="w-full h-full object-cover object-[center_15%] group-hover:scale-105 transition-transform duration-500" 
+                  className="w-full h-full object-contain bg-light-blue/20 transition-transform duration-500" 
                 />
               </div>
               <div className="flex flex-col gap-2">
