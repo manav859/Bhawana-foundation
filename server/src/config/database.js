@@ -37,7 +37,7 @@ export async function connectDatabase() {
       dbName: env.MONGODB_DB_NAME,
       maxPoolSize: isProduction ? 50 : 10,
       minPoolSize: isProduction ? 5 : 1,
-      serverSelectionTimeoutMS: 2000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
       retryWrites: true,
     });

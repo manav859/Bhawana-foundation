@@ -22,7 +22,11 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message = error?.response?.data?.message || error?.message || 'An unexpected API error occurred.';
+    // If the server provided a structured error response, pass it through
+    if (error.response?.data) {
+      return Promise.reject(error);
+    }
+    const message = error?.message || 'An unexpected API error occurred.';
     return Promise.reject(new Error(message));
   },
 );

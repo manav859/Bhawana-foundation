@@ -28,6 +28,10 @@ export function errorHandler(error, req, res, _next) {
     details = fieldErrors;
   }
 
+  // Joi or custom ApiError validation
+  if (message === 'Validation failed.' && details) {
+  }
+
   // Mongoose duplicate key error
   if (error.code === 11000) {
     statusCode = 409;

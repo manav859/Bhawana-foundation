@@ -27,7 +27,7 @@ function toArray(value, fallback = []) {
 export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: toNumber(process.env.PORT, 5000),
-  MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017',
+  MONGODB_URI: process.env.MONGODB_URI?.trim() || 'mongodb://127.0.0.1:27017',
   MONGODB_DB_NAME: process.env.MONGODB_DB_NAME || 'bhawna-foundation',
   CLIENT_URLS: toArray(process.env.CLIENT_URLS, ['http://localhost:5173']),
   JWT_SECRET: process.env.JWT_SECRET || 'change-this-secret',
@@ -35,9 +35,9 @@ export const env = {
   ADMIN_AUTH_MODE: process.env.ADMIN_AUTH_MODE || 'mock',
   UPLOAD_DIR: path.resolve(serverRoot, process.env.UPLOAD_DIR || 'uploads'),
   MAX_FILE_SIZE_MB: toNumber(process.env.MAX_FILE_SIZE_MB, 10),
-  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME || '',
-  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY || '',
-  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET || '',
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME?.trim() || '',
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY?.trim() || '',
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET?.trim() || '',
 };
 
 export const isProduction = env.NODE_ENV === 'production';

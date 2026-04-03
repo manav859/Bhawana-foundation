@@ -115,7 +115,7 @@ export function AdminProjectEditor() {
         const uploadData = new FormData();
         uploadData.append('file', imageFile);
         const uploadRes = await uploadService.upload(uploadData);
-        finalImagesArr = [uploadRes.data.url]; // For simplicity in Phase 5, we keep one primary image in the array
+        finalImagesArr = [uploadRes.data.data.url]; // Corrected path to data.data.url
       }
 
       const payload = { ...formData, images: finalImagesArr };
@@ -128,7 +128,13 @@ export function AdminProjectEditor() {
 
       navigate('/admin/projects');
     } catch (err) {
-      setError(err.message || `Failed to ${isEditMode ? 'update' : 'create'} project`);
+      const serverDetails = err.response?.data?.details;
+      if (Array.isArray(serverDetails) && serverDetails.length > 0) {
+        const errorMsg = serverDetails.map(d => `${d.field}: ${d.message}`).join(' | ');
+        setError(`Validation Failed: ${errorMsg}`);
+      } else {
+        setError(err.response?.data?.message || err.message || `Failed to ${isEditMode ? 'update' : 'create'} project`);
+      }
       window.scrollTo(0, 0);
     } finally {
       setIsSaving(false);
