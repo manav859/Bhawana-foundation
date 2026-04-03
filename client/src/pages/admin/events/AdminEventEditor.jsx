@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Upload, X, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, AlertCircle } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
+import { ImageUploader } from '@/components/ui/ImageUploader.jsx';
 import { adminService } from '@/features/api/services/admin.service';
-import { uploadService } from '@/features/api/services/upload.service';
 
 export function AdminEventEditor() {
   const { id } = useParams();
@@ -29,9 +29,6 @@ export function AdminEventEditor() {
     image: ''
   });
 
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState('');
-
   useEffect(() => {
     if (isEditMode) {
       loadEvent();
@@ -50,7 +47,6 @@ export function AdminEventEditor() {
         slug: data.slug || '',
         shortDescription: data.shortDescription || '',
         fullDescription: data.fullDescription || '',
-        // Make sure date is formatted correctly for date input type
         date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
         time: data.time || '',
         location: data.location || '',
@@ -59,9 +55,8 @@ export function AdminEventEditor() {
         isFeatured: data.isFeatured || false,
         image: data.image || ''
       });
-      setImagePreview(data.image || '');
     } catch (err) {
-      setError(err.message || 'Failed to load event data');
+      setError(err.response?.data?.message || err.message || 'Failed to load event data');
     } finally {
       setIsLoading(false);
     }
@@ -75,30 +70,6 @@ export function AdminEventEditor() {
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    
-    // Quick validation
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload a valid image file');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size should not exceed 5MB');
-      return;
-    }
-
-    setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
-  };
-
-  const removeImage = () => {
-    setImageFile(null);
-    setImagePreview('');
-    setFormData(prev => ({ ...prev, image: '' }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title) {
@@ -109,18 +80,9 @@ export function AdminEventEditor() {
     try {
       setIsSaving(true);
       setError(null);
-      
-      let finalImageUrl = formData.image;
 
-      // Handle file upload if there's a new file
-      if (imageFile) {
-        const uploadData = new FormData();
-        uploadData.append('file', imageFile);
-        const uploadRes = await uploadService.upload(uploadData);
-        finalImageUrl = uploadRes.data.url;
-      }
-
-      const payload = { ...formData, image: finalImageUrl };
+      const imageUrl = typeof formData.image === 'object' ? formData.image.url : formData.image;
+      const payload = { ...formData, image: imageUrl };
 
       if (isEditMode) {
         await adminService.update('events', id, payload);
@@ -130,7 +92,12 @@ export function AdminEventEditor() {
 
       navigate('/admin/events');
     } catch (err) {
-      setError(err.message || `Failed to ${isEditMode ? 'update' : 'create'} event`);
+      const serverDetails = err.response?.data?.details;
+      if (Array.isArray(serverDetails) && serverDetails.length > 0) {
+        setError(`Validation Failed: ${serverDetails.map(d => `${d.field}: ${d.message}`).join(' | ')}`);
+      } else {
+        setError(err.response?.data?.message || err.message || `Failed to ${isEditMode ? 'update' : 'create'} event`);
+      }
       window.scrollTo(0, 0);
     } finally {
       setIsSaving(false);
@@ -228,75 +195,33 @@ export function AdminEventEditor() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-text-dark">Date</label>
-              <Input 
-                type="date"
-                name="date" 
-                value={formData.date} 
-                onChange={handleChange} 
-              />
+              <Input type="date" name="date" value={formData.date} onChange={handleChange} />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-text-dark">Time</label>
-              <Input 
-                name="time" 
-                value={formData.time} 
-                onChange={handleChange} 
-                placeholder="E.g., 06:00 PM - 10:00 PM"
-              />
+              <Input name="time" value={formData.time} onChange={handleChange} placeholder="E.g., 06:00 PM - 10:00 PM" />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-text-dark">Category</label>
-              <Input 
-                name="category" 
-                value={formData.category} 
-                onChange={handleChange} 
-                placeholder="E.g., Fundraiser"
-              />
+              <Input name="category" value={formData.category} onChange={handleChange} placeholder="E.g., Fundraiser" />
             </div>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-text-dark">Location</label>
-            <Input 
-              name="location" 
-              value={formData.location} 
-              onChange={handleChange} 
-              placeholder="E.g., Grand Palace Hotel, Jaipur"
-            />
+            <Input name="location" value={formData.location} onChange={handleChange} placeholder="E.g., Grand Palace Hotel, Jaipur" />
           </div>
         </div>
 
-        {/* Media */}
+        {/* Media — now uses ImageUploader with crop */}
         <div className="bg-white p-6 rounded-xl border border-border-light shadow-sm space-y-6">
           <h2 className="font-display text-lg font-semibold text-text-dark border-b border-border-light pb-2">Media & Banner</h2>
-          
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-text-dark">Hero Image</label>
-            
-            {imagePreview ? (
-              <div className="relative w-full h-[240px] rounded-lg overflow-hidden border border-border-light group">
-                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <button 
-                    type="button" 
-                    onClick={removeImage}
-                    className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 shadow-md"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center w-full h-[240px] border-2 border-dashed border-border-light rounded-lg cursor-pointer bg-bg-light hover:bg-gray-50 transition-colors">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 text-brand-secondary mb-3" />
-                  <p className="mb-2 text-sm text-text-secondary"><span className="font-semibold text-primary-blue">Click to upload</span> or drag and drop</p>
-                  <p className="text-xs text-text-secondary">PNG, JPG, WEBP (Max: 5MB)</p>
-                </div>
-                <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
-              </label>
-            )}
-          </div>
+          <ImageUploader
+            value={formData.image}
+            onChange={(img) => setFormData(prev => ({ ...prev, image: img ? (img.url || img) : '' }))}
+            label="Hero Image"
+            accept="image/*"
+          />
         </div>
 
         {/* Publishing & Settings */}
@@ -335,19 +260,10 @@ export function AdminEventEditor() {
         </div>
 
         <div className="flex items-center justify-end gap-4 pt-4">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={() => navigate('/admin/events')}
-            disabled={isSaving}
-          >
+          <Button type="button" variant="outline" onClick={() => navigate('/admin/events')} disabled={isSaving}>
             Cancel
           </Button>
-          <Button 
-            type="submit" 
-            disabled={isSaving}
-            className="flex items-center gap-2 px-8"
-          >
+          <Button type="submit" disabled={isSaving} className="flex items-center gap-2 px-8">
             {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
             <Save className="w-4 h-4" />
             {isEditMode ? 'Save Changes' : 'Create Event'}

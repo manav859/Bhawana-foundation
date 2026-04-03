@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/utils/cn.js';
 
 const variantClasses = {
-  primary: 'bg-brand-blue text-white hover:bg-blue-700',
-  secondary: 'border border-brand-border bg-white text-brand-dark hover:border-brand-blue hover:text-brand-blue',
-  ghost: 'bg-transparent text-brand-secondary hover:bg-slate-100 hover:text-brand-dark',
-  warm: 'bg-brand-warm text-white hover:bg-amber-500',
+  primary: 'bg-primary-blue text-white hover:bg-blue-700',
+  secondary: 'border border-border-light bg-white text-text-dark hover:border-primary-blue hover:text-primary-blue',
+  ghost: 'bg-transparent text-text-secondary hover:bg-gray-100 hover:text-text-dark',
+  warm: 'bg-warm-orange text-white hover:bg-amber-600',
 };
 
 export function Button({
@@ -18,7 +18,7 @@ export function Button({
   ...props
 }) {
   const classes = cn(
-    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
+    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60',
     variantClasses[variant],
     className,
   );

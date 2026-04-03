@@ -1,8 +1,20 @@
 import axios from 'axios';
 import { getStoredSession } from '@/features/auth/auth.storage.js';
 
+function getBaseURL() {
+  // If an env var is set AND we're in production build, use it
+  if (import.meta.env.VITE_API_URL && import.meta.env.PROD) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Auto-detect: localhost → local backend, anything else → Render
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  return isLocal
+    ? 'http://localhost:5000/api/v1'
+    : 'https://bhawana-foundation.onrender.com/api/v1';
+}
+
 export const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1',
+  baseURL: getBaseURL(),
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',

@@ -54,23 +54,7 @@ export function AdminDashboardPage() {
         </div>
       )}
 
-      {/* Quick Links */}
-      <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: 'New Project', to: '/admin/projects/new', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100' },
-            { label: 'New Program', to: '/admin/programs/new', color: 'bg-green-50 text-green-700 hover:bg-green-100' },
-            { label: 'New Blog Post', to: '/admin/blogs/new', color: 'bg-purple-50 text-purple-700 hover:bg-purple-100' },
-            { label: 'Upload to Gallery', to: '/admin/gallery/new', color: 'bg-amber-50 text-amber-700 hover:bg-amber-100' },
-          ].map((action) => (
-            <Link key={action.to} to={action.to} className={`px-4 py-3 rounded-xl text-sm font-semibold text-center transition-colors ${action.color}`}>
-              {action.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-
+    
       {/* Recent Activity */}
       {stats?.recent && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">

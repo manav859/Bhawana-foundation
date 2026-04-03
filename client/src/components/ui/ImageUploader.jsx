@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import { uploadService } from '@/features/api/services/upload.service.js';
+import { ImageCropModal } from './ImageCropModal.jsx';
 
 export function ImageUploader({
   value,
@@ -11,9 +12,11 @@ export function ImageUploader({
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
+  const [cropSrc, setCropSrc] = useState(null);
+  const [pendingFileName, setPendingFileName] = useState('');
   const inputRef = useRef(null);
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -23,6 +26,38 @@ export function ImageUploader({
       return;
     }
 
+    setError('');
+
+    // If it's a video, skip crop and upload directly
+    if (file.type.startsWith('video/')) {
+      uploadFile(file);
+      return;
+    }
+
+    // For images, show the crop modal
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropSrc(reader.result);
+      setPendingFileName(file.name);
+    };
+    reader.readAsDataURL(file);
+
+    // Reset file input so the same file can be re-selected
+    if (inputRef.current) inputRef.current.value = '';
+  };
+
+  const handleCropComplete = async (croppedBlob) => {
+    setCropSrc(null);
+    const file = new File([croppedBlob], pendingFileName || 'cropped.jpg', { type: 'image/jpeg' });
+    await uploadFile(file);
+  };
+
+  const handleCropCancel = () => {
+    setCropSrc(null);
+    setPendingFileName('');
+  };
+
+  const uploadFile = async (file) => {
     try {
       setUploading(true);
       setError('');
@@ -40,7 +75,7 @@ export function ImageUploader({
         resourceType: data.resourceType,
       });
     } catch (err) {
-      setError(err.message || 'Upload failed');
+      setError(err.response?.data?.message || err.message || 'Upload failed');
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = '';
@@ -104,6 +139,15 @@ export function ImageUploader({
       )}
 
       {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+
+      {/* Crop Modal */}
+      {cropSrc && (
+        <ImageCropModal
+          imageSrc={cropSrc}
+          onCancel={handleCropCancel}
+          onCropComplete={handleCropComplete}
+        />
+      )}
     </div>
   );
 }

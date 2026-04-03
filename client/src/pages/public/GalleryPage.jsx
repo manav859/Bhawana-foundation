@@ -1,28 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Image as ImageIcon, Play } from 'lucide-react';
-
-const galleryData = [
-  { id: 1, type: "image", category: "Education", src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4OTc2MDZ8&ixlib=rb-4.1.0&q=80&w=800", title: "Rural Primary Schooling", span: "square" },
-  { id: 2, type: "image", category: "Healthcare", src: "https://images.unsplash.com/photo-1576089172869-4f5f6f315620?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4OTc3OTN8&ixlib=rb-4.1.0&q=80&w=800", title: "Community Healthcare Center", span: "square" },
-  { id: 3, type: "image", category: "Events", src: "https://images.unsplash.com/photo-1582213713374-132b9ef1825b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4OTc4MDJ8&ixlib=rb-4.1.0&q=80&w=800", title: "Women's Vocational Training", span: "square" },
-  { id: 4, type: "image", category: "Healthcare", src: "https://images.unsplash.com/photo-1593113563332-f36e8976b92a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkyNDZ8&ixlib=rb-4.1.0&q=80&w=800", title: "Village Wellness Awareness", span: "square" },
-  { id: 5, type: "image", category: "Healthcare", src: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODkyNDZ8&ixlib=rb-4.1.0&q=80&w=800", title: "Support for the Elderly", span: "square" },
-  { id: 6, type: "video", category: "Education", src: "https://assets.mixkit.co/videos/preview/mixkit-children-in-a-classroom-1175-large.mp4", title: "Classroom Activities", span: "square" },
-  { id: 7, type: "video", category: "Healthcare", src: "https://assets.mixkit.co/videos/preview/mixkit-doctor-checking-a-patients-heartbeat-4328-large.mp4", title: "Medical Checkup", span: "square" },
-  { id: 8, type: "video", category: "Events", src: "https://assets.mixkit.co/videos/preview/mixkit-volunteer-giving-food-to-the-homeless-42823-large.mp4", title: "Community Food Drive", span: "square" },
-  { id: 9, type: "image", category: "Education", src: "https://images.unsplash.com/photo-1588072432836-e10032774350?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODgxMTN8&ixlib=rb-4.1.0&q=80&w=800", title: "Literacy Empowerment Program", span: "square" },
-];
-
-const categories = ["All", "Photos", "Videos", "Education", "Healthcare", "Events"];
+import { ChevronRight, Image as ImageIcon, Play, Loader2 } from 'lucide-react';
+import { http } from '@/features/api/http.js';
 
 export function GalleryPage() {
-  const [activeTab, setActiveTab] = useState("All");
+  const [activeTab, setActiveTab] = useState('All');
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filteredGallery = galleryData.filter(item => {
-    if (activeTab === "All") return true;
-    if (activeTab === "Photos") return item.type === "image";
-    if (activeTab === "Videos") return item.type === "video";
+  useEffect(() => {
+    fetchGallery();
+  }, []);
+
+  const fetchGallery = async () => {
+    try {
+      setLoading(true);
+      const res = await http.get('/gallery');
+      setGalleryItems(res.data.data || []);
+    } catch (err) {
+      setError('Failed to load gallery');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Derive categories from fetched data
+  const dataCategories = [...new Set(galleryItems.map(item => item.category).filter(Boolean))];
+  const categories = ['All', 'Photos', 'Videos', ...dataCategories];
+
+  // Determine type based on image URL extension
+  const getType = (item) => {
+    if (item.image?.match(/\.(mp4|webm|mov)/i)) return 'video';
+    return 'image';
+  };
+
+  const filteredGallery = galleryItems.filter(item => {
+    const type = getType(item);
+    if (activeTab === 'All') return true;
+    if (activeTab === 'Photos') return type === 'image';
+    if (activeTab === 'Videos') return type === 'video';
     return item.category === activeTab;
   });
 
@@ -31,7 +49,6 @@ export function GalleryPage() {
       
       {/* 1. Hero Section */}
       <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-gray-900 overflow-hidden">
-        {/* Hero Background Image with Neutral Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=1200" 
@@ -39,7 +56,6 @@ export function GalleryPage() {
             className="w-full h-full object-cover opacity-50"
           />
           <div className="absolute inset-0 bg-black/40" />
-          {/* Abstract Background Shapes */}
           <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
           <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-10 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
         </div>
@@ -64,7 +80,7 @@ export function GalleryPage() {
         
         <div className="flex flex-col gap-10">
           
-          {/* Tabs - Updated to Capsule Style */}
+          {/* Tabs */}
           <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide justify-center">
             {categories.map((cat) => (
               <button
@@ -81,49 +97,71 @@ export function GalleryPage() {
             ))}
           </div>
 
-          {/* Gallery Grid (Uniform 3-Column Square Grid) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredGallery.map((item) => (
-              <div 
-                key={item.id} 
-                className="relative w-full aspect-square rounded-[24px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 bg-gray-100"
-              >
-                {item.type === "video" ? (
-                  <video 
-                    src={item.src} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    muted 
-                    loop 
-                    onMouseEnter={(e) => e.target.play()} 
-                    onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
-                  />
-                ) : (
-                  <img src={item.src} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                )}
-                
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
-                  <span className="font-sans text-[12px] font-bold text-white/80 uppercase tracking-[1px] mb-1">{item.category}</span>
-                  <h4 className="font-display text-[20px] font-bold text-white leading-tight">{item.title}</h4>
-                </div>
-                
-                <div className="absolute top-6 right-6 bg-white/20 backdrop-blur-md p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {item.type === "video" ? (
-                    <Play className="w-5 h-5 text-white" fill="white" />
-                  ) : (
-                    <ImageIcon className="w-5 h-5 text-white" />
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Loading State */}
+          {loading && (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-primary-blue" />
+            </div>
+          )}
 
-          {/* Load More - Outlined Style */}
-          {filteredGallery.length > 0 && (
-            <div className="flex justify-center mt-6">
-              <button className="px-10 py-3 bg-white border border-primary-blue rounded-xl font-sans text-[15px] font-bold text-primary-blue hover:bg-primary-blue hover:text-white transition-all duration-300 shadow-sm">
-                Load More Content
+          {/* Error State */}
+          {error && !loading && (
+            <div className="text-center py-16">
+              <p className="text-text-secondary text-lg">{error}</p>
+              <button onClick={fetchGallery} className="mt-4 px-6 py-2 bg-primary-blue text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                Retry
               </button>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && filteredGallery.length === 0 && (
+            <div className="text-center py-16">
+              <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="font-display text-xl font-semibold text-text-dark mb-2">No items yet</h3>
+              <p className="text-text-secondary">Gallery items will appear here once they are added.</p>
+            </div>
+          )}
+
+          {/* Gallery Grid */}
+          {!loading && !error && filteredGallery.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredGallery.map((item) => {
+                const type = getType(item);
+                return (
+                  <div 
+                    key={item._id} 
+                    className="relative w-full aspect-square rounded-[24px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 bg-gray-100"
+                  >
+                    {type === 'video' ? (
+                      <video 
+                        src={item.image} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                        muted 
+                        loop 
+                        onMouseEnter={(e) => e.target.play()} 
+                        onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
+                      />
+                    ) : (
+                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    )}
+                    
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                      {item.category && <span className="font-sans text-[12px] font-bold text-white/80 uppercase tracking-[1px] mb-1">{item.category}</span>}
+                      {item.title && <h4 className="font-display text-[20px] font-bold text-white leading-tight">{item.title}</h4>}
+                    </div>
+                    
+                    <div className="absolute top-6 right-6 bg-white/20 backdrop-blur-md p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {type === 'video' ? (
+                        <Play className="w-5 h-5 text-white" fill="white" />
+                      ) : (
+                        <ImageIcon className="w-5 h-5 text-white" />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
 

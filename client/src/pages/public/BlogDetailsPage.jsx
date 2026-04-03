@@ -94,7 +94,7 @@ export function BlogDetailsPage() {
       <section className="w-full px-6 lg:px-[120px] max-w-[1200px] mx-auto mt-8">
         <div className="w-full h-[300px] lg:h-[500px] rounded-2xl overflow-hidden shadow-sm">
           <img 
-            src={post.image || "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200"} 
+            src={post.featuredImage || "https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200"} 
             alt={post.title} 
             className="w-full h-full object-cover"
           />
