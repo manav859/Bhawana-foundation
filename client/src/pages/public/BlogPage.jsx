@@ -36,7 +36,7 @@ export function BlogPage() {
         {/* Hero Background Image with Neutral Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=1200" 
+            src="/uploads/blog-hero.jpg" 
             alt="Blog Hero" 
             className="w-full h-full object-cover opacity-70"
           />

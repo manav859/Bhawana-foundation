@@ -12,6 +12,7 @@ export const upload = multer({
   fileFilter: (_req, file, cb) => {
     const allowedMimes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+      'image/heic', 'image/heif',
       'video/mp4', 'video/webm', 'video/quicktime',
     ];
     if (allowedMimes.includes(file.mimetype)) {

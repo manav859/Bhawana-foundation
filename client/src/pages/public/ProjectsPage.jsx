@@ -45,7 +45,7 @@ export function ProjectsPage() {
       <section className="relative w-full h-[340px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1593113563332-f36e8976b92a?q=80&w=1080&auto=format&fit=crop" 
+            src="/uploads/project-hero.jpg" 
             alt="Projects Hero Background" 
             className="w-full h-full object-cover"
           />
@@ -116,7 +116,6 @@ export function ProjectsPage() {
                     src={project.image || (project.images && project.images[0]) || "https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=600"} 
                     alt={project.title} 
                     className="w-full h-full object-cover transition-transform duration-500" 
-
                   />
                   <div className={`absolute top-4 left-4 px-3 py-1 text-white font-sans text-[11px] font-semibold rounded-md shadow-sm opacity-90 ${project.categoryColor || 'bg-primary-blue'}`}>
                     {project.badgeText || project.category}

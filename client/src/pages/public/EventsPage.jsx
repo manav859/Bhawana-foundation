@@ -61,7 +61,7 @@ export function EventsPage() {
         {/* Hero Background Image with Neutral Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200" 
+            src="/uploads/event-hero.jpg" 
             alt="Events Hero" 
             className="w-full h-full object-cover opacity-50"
           />
@@ -128,7 +128,6 @@ export function EventsPage() {
                       src={event.image || "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=600"} 
                       alt={event.title} 
                       className="w-full h-full object-cover transition-transform duration-500" 
-
                     />
                   </div>
 

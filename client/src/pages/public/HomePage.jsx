@@ -57,7 +57,7 @@ export function HomePage() {
       <section className="relative w-full h-[500px] lg:h-[620px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1761039808159-f02b58f07032?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NzQ4ODc0ODV8&ixlib=rb-4.1.0&q=80&w=1080" 
+            src="/uploads/home-hero.jpg" 
             alt="Hero Background" 
             className="w-full h-full object-cover"
           />
@@ -120,7 +120,7 @@ export function HomePage() {
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-[60px] max-w-[1440px] mx-auto">
           <div className="w-full lg:w-[560px] aspect-[16/10] shrink-0 rounded-2xl overflow-hidden shadow-lg bg-slate-50">
             <img 
-              src="https://images.unsplash.com/photo-1590874023110-f82d4c63b599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg" 
+              src="/uploads/about-us.jpg" 
               alt="About Us"
               className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
             />
@@ -157,8 +157,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-
-
 
       {/* 5. Featured Projects */}
       <section className="w-full bg-bg-light px-6 py-[60px] lg:px-20 lg:py-[80px]">
@@ -235,7 +233,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-
 
       {/* 6. Testimonials */}
       <section className="w-full bg-white px-6 py-[60px] lg:px-20 lg:py-[80px] border-t border-border-light">

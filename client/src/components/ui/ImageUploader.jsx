@@ -7,7 +7,7 @@ export function ImageUploader({
   value,
   onChange,
   label = 'Upload Image',
-  accept = 'image/*,video/*',
+  accept = 'image/*,video/*,.heic,.heif',
   className = '',
 }) {
   const [uploading, setUploading] = useState(false);
@@ -28,8 +28,10 @@ export function ImageUploader({
 
     setError('');
 
-    // If it's a video, skip crop and upload directly
-    if (file.type.startsWith('video/')) {
+    // If it's a video or HEIC/HEIF, skip crop and upload directly
+    // Browser <img> tags cannot render HEIC natively on non-Safari environments.
+    const isHeic = file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
+    if (file.type.startsWith('video/') || isHeic) {
       uploadFile(file);
       return;
     }
@@ -125,7 +127,7 @@ export function ImageUploader({
               </span>
               {!uploading && ' or drag and drop'}
             </p>
-            <p className="text-xs text-text-secondary">PNG, JPG, WEBP, MP4 (Max: 10MB)</p>
+            <p className="text-xs text-text-secondary">PNG, JPG, WEBP, HEIC, MP4 (Max: 10MB)</p>
           </div>
           <input
             ref={inputRef}

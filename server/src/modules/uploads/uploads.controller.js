@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
+import convert from 'heic-convert';
 import { env } from '../../config/env.js';
 import { catchAsync } from '../../utils/catch-async.js';
 import { sendResponse } from '../../utils/send-response.js';
@@ -14,10 +15,36 @@ cloudinary.config({
 /**
  * POST /uploads
  * Upload a single file to Cloudinary from memory buffer.
+ * Automatically converts HEIC/HEIF to JPEG.
  */
 export const uploadFile = catchAsync(async (req, res) => {
   if (!req.file) {
     throw new ApiError(400, 'No file provided.');
+  }
+
+  // Handle HEIC/HEIF conversion
+  const isHeic = req.file.mimetype === 'image/heic' || 
+                 req.file.mimetype === 'image/heif' ||
+                 req.file.originalname.toLowerCase().endsWith('.heic') ||
+                 req.file.originalname.toLowerCase().endsWith('.heif');
+
+  if (isHeic) {
+    try {
+      const outputBuffer = await convert({
+        buffer: req.file.buffer,
+        format: 'JPEG',
+        quality: 0.9,
+      });
+      
+      // Update file object with converted data
+      req.file.buffer = Buffer.from(outputBuffer);
+      req.file.mimetype = 'image/jpeg';
+      req.file.originalname = req.file.originalname.replace(/\.(heic|heif)$/i, '.jpg');
+      req.file.size = req.file.buffer.length;
+    } catch (error) {
+      console.error('HEIC conversion failed:', error);
+      throw new ApiError(500, 'Failed to convert HEIC image.');
+    }
   }
 
   // Determine resource type
@@ -52,7 +79,9 @@ export const uploadFile = catchAsync(async (req, res) => {
       height: result.height,
       resourceType: result.resource_type,
     },
-    message: 'File uploaded to Cloudinary successfully.',
+    message: isHeic 
+      ? 'HEIC image converted to JPEG and uploaded successfully.' 
+      : 'File uploaded to Cloudinary successfully.',
   });
 });
 

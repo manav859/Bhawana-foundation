@@ -52,7 +52,7 @@ export function GalleryPage() {
       <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-gray-900 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?q=80&w=1200" 
+            src="/uploads/gallery-hero.JPG" 
             alt="Gallery Hero" 
             className="w-full h-full object-cover opacity-50"
           />
