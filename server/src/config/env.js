@@ -38,6 +38,9 @@ export const env = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME?.trim() || '',
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY?.trim() || '',
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET?.trim() || '',
+  IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY?.trim() || '',
+  IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY?.trim() || '',
+  IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT?.trim() || '',
 };
 
 export const isProduction = env.NODE_ENV === 'production';
