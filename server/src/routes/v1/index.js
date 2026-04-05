@@ -15,6 +15,10 @@ import { settingsRouter } from '../../modules/settings/settings.routes.js';
 import { testimonialsRouter } from '../../modules/testimonials/testimonials.routes.js';
 import { uploadsRouter } from '../../modules/uploads/uploads.routes.js';
 import { volunteersRouter } from '../../modules/volunteers/volunteers.routes.js';
+import { buyerAuthRouter } from '../../modules/buyer-auth/buyer-auth.routes.js';
+import { shopRouter } from '../../modules/shop/shop.routes.js';
+import { paymentRouter } from '../../modules/payment/payment.routes.js';
+import { adminShopRouter } from '../../modules/admin-shop/admin-shop.routes.js';
 
 export const v1Router = express.Router();
 
@@ -34,3 +38,7 @@ v1Router.use('/contacts', contactsRouter);
 v1Router.use('/newsletter', newsletterRouter);
 v1Router.use('/volunteers', volunteersRouter);
 v1Router.use('/donations', donationsRouter);
+v1Router.use('/buyer-auth', buyerAuthRouter);
+v1Router.use('/shop', shopRouter);
+v1Router.use('/payment', paymentRouter);
+v1Router.use('/admin-shop', adminShopRouter);

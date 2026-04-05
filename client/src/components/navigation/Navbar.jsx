@@ -1,16 +1,21 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/features/cart/CartContext.jsx';
+import { CartDrawer } from '@/components/public/CartDrawer.jsx';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const location = useLocation();
+  const { cartCount } = useCart();
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Projects', path: '/projects' },
     { name: 'Gallery', path: '/gallery' },
+    { name: 'Shop', path: '/shop' },
     { name: 'Events', path: '/events' },
     { name: 'Blog', path: '/blog' },
     { name: 'Contact', path: '/contact' },
@@ -45,8 +50,20 @@ export function Navbar() {
         })}
       </div>
 
-      {/* Desktop Donation Button */}
-      <div className="hidden lg:block">
+      {/* Desktop Cart + Donation Button */}
+      <div className="hidden lg:flex items-center gap-3">
+        <button
+          onClick={() => setCartOpen(true)}
+          className="relative p-2.5 rounded-lg text-text-dark hover:bg-bg-light transition-colors"
+          aria-label="Open cart"
+        >
+          <ShoppingCart className="h-5 w-5" />
+          {cartCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-warm-orange text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+              {cartCount > 9 ? '9+' : cartCount}
+            </span>
+          )}
+        </button>
         <Link
           to="/donate"
           className="flex items-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-[15px] font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
@@ -56,14 +73,28 @@ export function Navbar() {
         </Link>
       </div>
 
-      {/* Mobile Hamburger */}
-      <button 
-        className="flex h-6 w-6 items-center justify-center text-text-dark lg:hidden"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle menu"
-      >
-        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-      </button>
+      {/* Mobile Cart + Hamburger */}
+      <div className="flex items-center gap-2 lg:hidden">
+        <button
+          onClick={() => setCartOpen(true)}
+          className="relative p-2 text-text-dark"
+          aria-label="Open cart"
+        >
+          <ShoppingCart className="h-5 w-5" />
+          {cartCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-warm-orange text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              {cartCount > 9 ? '9+' : cartCount}
+            </span>
+          )}
+        </button>
+        <button 
+          className="flex h-6 w-6 items-center justify-center text-text-dark"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle menu"
+        >
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+      </div>
 
       {/* Mobile Menu Overlay */}
       <div 
@@ -101,6 +132,7 @@ export function Navbar() {
           </div>
         </div>
       </div>
+      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
     </nav>
   );
 }

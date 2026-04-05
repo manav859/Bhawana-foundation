@@ -4,6 +4,7 @@ export const publicNavigation = [
   { label: 'Projects', to: '/projects' },
   { label: 'Events', to: '/events' },
   { label: 'Gallery', to: '/gallery' },
+  { label: 'Shop', to: '/shop' },
   { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -26,4 +27,9 @@ export const adminNavigation = [
   { label: 'Volunteers', to: '/admin/volunteers' },
   { label: 'Contacts', to: '/admin/contacts' },
   { label: 'Newsletter', to: '/admin/newsletter' },
+  { label: '─── Shop ───', to: '#', separator: true },
+  { label: '📦 Products', to: '/admin/shop/products' },
+  { label: '📂 Categories', to: '/admin/shop/categories' },
+  { label: '🛒 Orders', to: '/admin/shop/orders' },
+  { label: '📊 Analytics', to: '/admin/shop/analytics' },
 ];

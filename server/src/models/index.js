@@ -11,3 +11,7 @@ export { default as GalleryItem } from './GalleryItem.js';
 export { default as Testimonial } from './Testimonial.js';
 export { default as Partner } from './Partner.js';
 export { default as SiteSetting } from './SiteSetting.js';
+export { default as Buyer } from './Buyer.js';
+export { default as Category } from './Category.js';
+export { default as Product } from './Product.js';
+export { default as Order } from './Order.js';

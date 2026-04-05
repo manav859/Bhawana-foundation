@@ -26,6 +26,12 @@ import { AdminContactsList } from '@/pages/admin/contacts/AdminContactsList.jsx'
 import { AdminDonationsList } from '@/pages/admin/donations/AdminDonationsList.jsx';
 import { AdminVolunteersList } from '@/pages/admin/volunteers/AdminVolunteersList.jsx';
 import { AdminNewsletterList } from '@/pages/admin/newsletter/AdminNewsletterList.jsx';
+import { AdminShopProductsList } from '@/pages/admin/shop/AdminShopProductsList.jsx';
+import { AdminShopProductEditor } from '@/pages/admin/shop/AdminShopProductEditor.jsx';
+import { AdminShopCategoriesList } from '@/pages/admin/shop/AdminShopCategoriesList.jsx';
+import { AdminShopOrdersList } from '@/pages/admin/shop/AdminShopOrdersList.jsx';
+import { AdminShopOrderDetail } from '@/pages/admin/shop/AdminShopOrderDetail.jsx';
+import { AdminShopAnalytics } from '@/pages/admin/shop/AdminShopAnalytics.jsx';
 
 // Public pages
 import { AboutPage } from '@/pages/public/AboutPage.jsx';
@@ -45,6 +51,15 @@ import { NotFoundPage } from '@/pages/public/NotFoundPage.jsx';
 import { PrivacyPolicyPage } from '@/pages/public/PrivacyPolicyPage.jsx';
 import { TermsPage } from '@/pages/public/TermsPage.jsx';
 import { DonationPolicyPage } from '@/pages/public/DonationPolicyPage.jsx';
+import { ShopPage } from '@/pages/public/ShopPage.jsx';
+import { ProductDetailPage } from '@/pages/public/ProductDetailPage.jsx';
+import { CartPage } from '@/pages/public/CartPage.jsx';
+import { CheckoutPage } from '@/pages/public/CheckoutPage.jsx';
+import { OrderConfirmationPage } from '@/pages/public/OrderConfirmationPage.jsx';
+import { MyOrdersPage } from '@/pages/public/MyOrdersPage.jsx';
+import { ShopLoginPage } from '@/pages/public/ShopLoginPage.jsx';
+import { ShopRegisterPage } from '@/pages/public/ShopRegisterPage.jsx';
+import { RequireBuyerAuth } from '@/features/buyer-auth/buyer-auth.guard.jsx';
 
 export function AppRouter() {
   return (
@@ -72,6 +87,21 @@ export function AppRouter() {
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="terms" element={<TermsPage />} />
           <Route path="donation-policy" element={<DonationPolicyPage />} />
+
+          {/* Shop (Public) */}
+          <Route path="shop" element={<ShopPage />} />
+          <Route path="shop/login" element={<ShopLoginPage />} />
+          <Route path="shop/register" element={<ShopRegisterPage />} />
+          <Route path="shop/:slug" element={<ProductDetailPage />} />
+          <Route path="cart" element={<CartPage />} />
+
+          {/* Shop (Buyer Auth Required) */}
+          <Route element={<RequireBuyerAuth />}>
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="order-confirmation/:id" element={<OrderConfirmationPage />} />
+            <Route path="my-orders" element={<MyOrdersPage />} />
+          </Route>
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
@@ -121,6 +151,15 @@ export function AppRouter() {
 
             {/* Settings */}
             <Route path="settings" element={<AdminSettingsPage />} />
+
+            {/* Shop Management */}
+            <Route path="shop/products" element={<AdminShopProductsList />} />
+            <Route path="shop/products/new" element={<AdminShopProductEditor />} />
+            <Route path="shop/products/:id/edit" element={<AdminShopProductEditor />} />
+            <Route path="shop/categories" element={<AdminShopCategoriesList />} />
+            <Route path="shop/orders" element={<AdminShopOrdersList />} />
+            <Route path="shop/orders/:id" element={<AdminShopOrderDetail />} />
+            <Route path="shop/analytics" element={<AdminShopAnalytics />} />
 
             <Route path="*" element={<AdminNotFoundPage />} />
           </Route>

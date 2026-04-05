@@ -21,22 +21,28 @@ export function AdminSidebar({ open, onClose }) {
         </div>
 
         <nav className="mt-8 grid gap-2">
-          {adminNavigation.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/admin'}
-              className={({ isActive }) =>
-                cn(
-                  'rounded-2xl px-4 py-3 text-sm font-medium text-brand-secondary hover:bg-slate-100 hover:text-brand-dark',
-                  isActive && 'bg-blue-50 text-brand-blue',
-                )
-              }
-              onClick={onClose}
-            >
-              {item.label}
-            </NavLink>
-          ))}
+          {adminNavigation.map((item) =>
+            item.separator ? (
+              <div key={item.label} className="px-4 pt-4 pb-1 text-xs font-bold text-brand-secondary/60 uppercase tracking-widest select-none">
+                {item.label}
+              </div>
+            ) : (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/admin'}
+                className={({ isActive }) =>
+                  cn(
+                    'rounded-2xl px-4 py-3 text-sm font-medium text-brand-secondary hover:bg-slate-100 hover:text-brand-dark',
+                    isActive && 'bg-blue-50 text-brand-blue',
+                  )
+                }
+                onClick={onClose}
+              >
+                {item.label}
+              </NavLink>
+            ),
+          )}
         </nav>
       </aside>
     </>

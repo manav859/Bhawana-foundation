@@ -41,6 +41,13 @@ export const env = {
   IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY?.trim() || '',
   IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY?.trim() || '',
   IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT?.trim() || '',
+  RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID?.trim() || '',
+  RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET?.trim() || '',
+  SMTP_HOST: process.env.SMTP_HOST?.trim() || '',
+  SMTP_PORT: toNumber(process.env.SMTP_PORT, 587),
+  SMTP_USER: process.env.SMTP_USER?.trim() || '',
+  SMTP_PASS: process.env.SMTP_PASS?.trim() || '',
+  FROM_EMAIL: process.env.FROM_EMAIL?.trim() || '',
 };
 
 export const isProduction = env.NODE_ENV === 'production';
