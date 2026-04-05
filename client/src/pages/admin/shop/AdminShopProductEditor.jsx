@@ -69,22 +69,34 @@ export function AdminShopProductEditor() {
       setIsSaving(true); setError(null);
       const imageUrl = typeof formData.image === 'object' ? formData.image.url : formData.image;
 
+      const childStory = {};
+      if (formData.childStoryName) childStory.name = formData.childStoryName;
+      if (formData.childStoryAge) childStory.age = Number(formData.childStoryAge);
+      if (formData.childStoryStory) childStory.story = formData.childStoryStory;
+      const childPhoto = typeof formData.childStoryPhoto === 'object' ? formData.childStoryPhoto.url : formData.childStoryPhoto;
+      if (childPhoto) childStory.photo = childPhoto;
+
       const payload = {
-        title: formData.title, slug: formData.slug,
-        shortDescription: formData.shortDescription, description: formData.description,
-        price: Number(formData.price), stock: Number(formData.stock),
-        lowStockThreshold: Number(formData.lowStockThreshold),
-        category: formData.category || null, sku: formData.sku,
-        tags: formData.tags ? formData.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
-        isFeatured: formData.isFeatured, isDonationOnly: formData.isDonationOnly,
-        impactMessage: formData.impactMessage, status: formData.status,
+        title: formData.title,
+        price: Number(formData.price),
+        status: formData.status,
+        isFeatured: formData.isFeatured,
+        isDonationOnly: formData.isDonationOnly,
         images: imageUrl ? [imageUrl] : [],
-        childStory: {
-          name: formData.childStoryName, age: formData.childStoryAge ? Number(formData.childStoryAge) : undefined,
-          story: formData.childStoryStory, photo: formData.childStoryPhoto,
-        },
       };
+
+      if (formData.slug) payload.slug = formData.slug;
+      if (formData.shortDescription) payload.shortDescription = formData.shortDescription;
+      if (formData.description) payload.description = formData.description;
+      if (formData.category) payload.category = formData.category;
+      if (formData.sku) payload.sku = formData.sku;
+      if (formData.impactMessage) payload.impactMessage = formData.impactMessage;
       if (formData.compareAtPrice) payload.compareAtPrice = Number(formData.compareAtPrice);
+      if (formData.tags) payload.tags = formData.tags.split(',').map((t) => t.trim()).filter(Boolean);
+      if (Object.keys(childStory).length > 0) payload.childStory = childStory;
+
+      payload.stock = Number(formData.stock) || 0;
+      payload.lowStockThreshold = Number(formData.lowStockThreshold) || 5;
 
       if (isEditMode) {
         await adminShopService.updateProduct(id, payload);
@@ -122,8 +134,8 @@ export function AdminShopProductEditor() {
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Title *</label><Input name="title" value={formData.title} onChange={handleChange} required /></div>
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Slug</label><Input name="slug" value={formData.slug} onChange={handleChange} placeholder="Auto-generated" /></div>
           </div>
-          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Short Description</label><Input name="shortDescription" value={formData.shortDescription} onChange={handleChange} maxLength={300} /></div>
-          <div className="space-y-2"><RichTextEditor label="Full Description" value={formData.description} onChange={(val) => setFormData((p) => ({ ...p, description: val }))} /></div>
+          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Short Description <span className="text-text-muted font-normal">(Optional)</span></label><Input name="shortDescription" value={formData.shortDescription} onChange={handleChange} maxLength={300} /></div>
+          <div className="space-y-2"><RichTextEditor label="Full Description (Optional)" value={formData.description} onChange={(val) => setFormData((p) => ({ ...p, description: val }))} /></div>
         </div>
 
         {/* Pricing & Inventory */}
@@ -133,8 +145,8 @@ export function AdminShopProductEditor() {
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Price (₹) *</label><Input type="number" name="price" value={formData.price} onChange={handleChange} min="0" required /></div>
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Compare Price (₹)</label><Input type="number" name="compareAtPrice" value={formData.compareAtPrice} onChange={handleChange} min="0" placeholder="Original price" /></div>
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">SKU</label><Input name="sku" value={formData.sku} onChange={handleChange} /></div>
-            <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Stock</label><Input type="number" name="stock" value={formData.stock} onChange={handleChange} min="0" /></div>
-            <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Low Stock Alert At</label><Input type="number" name="lowStockThreshold" value={formData.lowStockThreshold} onChange={handleChange} min="0" /></div>
+            <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Stock <span className="text-text-muted font-normal">(Optional)</span></label><Input type="number" name="stock" value={formData.stock} onChange={handleChange} min="0" /></div>
+            <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Low Stock Alert At <span className="text-text-muted font-normal">(Optional)</span></label><Input type="number" name="lowStockThreshold" value={formData.lowStockThreshold} onChange={handleChange} min="0" /></div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-text-dark">Category</label>
               <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-border-light bg-bg-light focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all text-[15px]">
@@ -143,25 +155,25 @@ export function AdminShopProductEditor() {
               </select>
             </div>
           </div>
-          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Tags (comma-separated)</label><Input name="tags" value={formData.tags} onChange={handleChange} placeholder="painting, craft, handmade" /></div>
+          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Tags <span className="text-text-muted font-normal">(Optional, comma-separated)</span></label><Input name="tags" value={formData.tags} onChange={handleChange} placeholder="painting, craft, handmade" /></div>
         </div>
 
         {/* Child Story */}
         <div className="bg-white p-6 rounded-xl border border-border-light shadow-sm space-y-6">
-          <h2 className="font-display text-lg font-semibold text-text-dark border-b border-border-light pb-2">Child's Story ❤️</h2>
+          <h2 className="font-display text-lg font-semibold text-text-dark border-b border-border-light pb-2">Child's Story <span className="text-text-muted font-normal text-sm">(Optional)</span> ❤️</h2>
           <p className="text-sm text-text-muted">Share the story of the child behind this artwork. This adds emotional value.</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Child's Name</label><Input name="childStoryName" value={formData.childStoryName} onChange={handleChange} /></div>
             <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Age</label><Input type="number" name="childStoryAge" value={formData.childStoryAge} onChange={handleChange} min="0" max="25" /></div>
             <div className="md:col-span-2 space-y-2"><label className="text-sm font-medium text-text-dark">Their Story</label><textarea name="childStoryStory" value={formData.childStoryStory} onChange={handleChange} rows={4} className="w-full px-4 py-3 rounded-lg border border-border-light bg-bg-light focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-blue/20 transition-all text-[15px]" /></div>
-            <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Child's Photo URL</label><Input name="childStoryPhoto" value={formData.childStoryPhoto} onChange={handleChange} placeholder="Upload via Uploads then paste URL" /></div>
+            <div className="md:col-span-2"><ImageUploader value={formData.childStoryPhoto} onChange={(img) => setFormData((p) => ({ ...p, childStoryPhoto: img ? (img.url || img) : '' }))} label="Child's Photo" accept="image/*" /></div>
           </div>
         </div>
 
         {/* Impact & Media */}
         <div className="bg-white p-6 rounded-xl border border-border-light shadow-sm space-y-6">
           <h2 className="font-display text-lg font-semibold text-text-dark border-b border-border-light pb-2">Impact & Media</h2>
-          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Impact Message</label><Input name="impactMessage" value={formData.impactMessage} onChange={handleChange} placeholder="e.g. This purchase supports education for 3 days" /></div>
+          <div className="space-y-2"><label className="text-sm font-medium text-text-dark">Impact Message <span className="text-text-muted font-normal">(Optional)</span></label><Input name="impactMessage" value={formData.impactMessage} onChange={handleChange} placeholder="e.g. This purchase supports education for 3 days" /></div>
           <ImageUploader value={formData.image} onChange={(img) => setFormData((p) => ({ ...p, image: img ? (img.url || img) : '' }))} label="Product Image" accept="image/*" />
         </div>
 

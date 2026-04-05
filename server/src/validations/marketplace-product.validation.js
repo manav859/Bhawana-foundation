@@ -1,11 +1,11 @@
 import Joi from 'joi';
 
 const childStorySchema = Joi.object({
-  name: Joi.string().max(100).allow(''),
-  age: Joi.number().min(0).max(25).allow(null),
-  story: Joi.string().max(2000).allow(''),
-  photo: Joi.string().uri().allow(''),
-});
+  name: Joi.string().max(100).allow('', null),
+  age: Joi.number().min(0).max(25).allow(null, ''),
+  story: Joi.string().max(2000).allow('', null),
+  photo: Joi.string().allow('', null),
+}).allow(null);
 
 export const createMarketplaceProductSchema = Joi.object({
   title: Joi.string().max(200).required(),
