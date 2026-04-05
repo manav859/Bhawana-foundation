@@ -13,6 +13,8 @@ export function AdminGalleryList() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('All');
+  const [activeMonth, setActiveMonth] = useState('All Months');
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
   
@@ -43,22 +45,91 @@ export function AdminGalleryList() {
     catch (err) { alert(err.message); } finally { setDeleting(false); }
   };
 
-  const filtered = searchTerm ? items.filter(i => (i.title || '').toLowerCase().includes(searchTerm.toLowerCase())) : items;
+  // Extract unique categories and months
+  const categories = [...new Set(['All', 'Photos', 'Videos', ...items.map(item => item.category).filter(Boolean)])];
+  const months = ['All Months', ...new Set(items.map(item => {
+    if (!item.createdAt) return null;
+    return new Date(item.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' });
+  }).filter(Boolean))];
+
+  const getType = (item) => {
+    if (item.image?.match(/\.(mp4|webm|mov|mkv)/i)) return 'video';
+    return 'image';
+  };
+
+  const filtered = items.filter(item => {
+    if (searchTerm && !(item.title || '').toLowerCase().includes(searchTerm.toLowerCase())) return false;
+    
+    // Category Filter
+    const type = getType(item);
+    let categoryMatch = false;
+    if (activeTab === 'All') categoryMatch = true;
+    else if (activeTab === 'Photos') categoryMatch = (type === 'image');
+    else if (activeTab === 'Videos') categoryMatch = (type === 'video');
+    else categoryMatch = (item.category === activeTab);
+    
+    if (!categoryMatch) return false;
+
+    // Month Filter
+    if (activeMonth !== 'All Months') {
+       if (!item.createdAt) return false;
+       const itemMonth = new Date(item.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' });
+       if (itemMonth !== activeMonth) return false;
+    }
+
+    return true;
+  });
 
   // Pagination Logic
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
   const currentItems = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Reset page when filtering
-  useEffect(() => setCurrentPage(1), [searchTerm]);
+  // Reset page when filters change
+  useEffect(() => setCurrentPage(1), [searchTerm, activeTab, activeMonth]);
 
   return (
     <div className="space-y-6 animate-in pb-10">
       <AdminPageHeader title="Manage Gallery" description="Upload and manage photos & videos."
         action={<Button onClick={() => navigate('/admin/gallery/new')} className="flex items-center gap-2"><Plus className="w-4 h-4" /> Add Item</Button>} />
-      <div className="relative w-full sm:max-w-xs">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary" />
-        <Input placeholder="Search gallery..." className="pl-9" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        {/* Search */}
+        <div className="relative w-full lg:max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary" />
+          <Input placeholder="Search gallery..." className="pl-9" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        </div>
+
+        {/* Filters */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full lg:w-auto overflow-hidden">
+          {/* Tabs */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide w-full sm:w-auto">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`px-3 py-1.5 rounded-full font-sans text-[13px] font-semibold whitespace-nowrap border transition-colors ${
+                  activeTab === cat 
+                    ? 'bg-primary-blue border-primary-blue text-white shadow-sm' 
+                    : 'bg-white border-border-light text-text-secondary hover:border-primary-blue/30'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Month Filter */}
+          {months.length > 1 && (
+            <select
+              value={activeMonth}
+              onChange={(e) => setActiveMonth(e.target.value)}
+              className="px-3 py-1.5 bg-white border border-border-light rounded-lg font-sans text-[13px] text-text-secondary outline-none focus:border-primary-blue transition-colors min-w-[140px]"
+            >
+              {months.map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          )}
+        </div>
       </div>
       {loading ? (
         <div className="flex justify-center py-20"><div className="w-8 h-8 border-2 border-primary-blue border-t-transparent rounded-full animate-spin" /></div>
@@ -67,15 +138,22 @@ export function AdminGalleryList() {
       ) : (
         <>
           <div className="grid grid-cols-3 gap-1 md:gap-2">
-            {currentItems.map((item) => (
-              <div key={item._id} className="relative group rounded-none overflow-hidden border border-border-light/30 aspect-square bg-slate-50">
-                <img src={item.image} alt={item.title || ''} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                  <button onClick={() => navigate(`/admin/gallery/${item._id}/edit`)} className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"><Edit2 className="w-4 h-4 text-text-dark" /></button>
-                  <button onClick={() => setDeleteTarget(item)} className="p-2 bg-red-500 rounded-full shadow-md hover:bg-red-600"><Trash2 className="w-4 h-4 text-white" /></button>
+            {currentItems.map((item) => {
+              const isVid = item.image?.match(/\.(mp4|webm|mov|mkv)/i);
+              return (
+                <div key={item._id} className="relative group rounded-none overflow-hidden border border-border-light/30 aspect-square bg-slate-50">
+                  {isVid ? (
+                    <video src={`${item.image}${item.image.includes('?') ? '&' : '?'}tr=f-mp4`} className="w-full h-full object-cover" preload="metadata" />
+                  ) : (
+                    <img src={`${item.image}${item.image.includes('?') ? '&' : '?'}tr=f-auto,w-auto`} alt={item.title || ''} className="w-full h-full object-cover" />
+                  )}
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                    <button onClick={() => navigate(`/admin/gallery/${item._id}/edit`)} className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100"><Edit2 className="w-4 h-4 text-text-dark" /></button>
+                    <button onClick={() => setDeleteTarget(item)} className="p-2 bg-red-500 rounded-full shadow-md hover:bg-red-600"><Trash2 className="w-4 h-4 text-white" /></button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {totalPages > 1 && (
