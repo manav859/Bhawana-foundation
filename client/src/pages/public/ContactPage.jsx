@@ -7,28 +7,37 @@ export function ContactPage() {
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-primary-blue overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+      <section className="relative w-full h-[340px] lg:h-[420px] flex items-center bg-gray-900 overflow-hidden">
+        {/* Hero Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/uploads/contact-hero.jpg" 
+            alt="Contact Hero" 
+            className="w-full h-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-black/40" />
+          {/* Abstract Background Shapes */}
+          <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-10 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+        </div>
         
         <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-white/80 font-sans text-[13px] font-medium">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
+          <div className="flex items-center gap-2 font-sans text-[13px] font-medium text-white/70">
+            <Link to="/" className="hover:text-white transition-opacity">Home</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white">Contact Us</span>
           </div>
           <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[600px] leading-[1.2]">
             Get In Touch
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/80 max-w-[500px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/70 max-w-[500px] leading-[1.6]">
             Whether you have a question about our work, want to volunteer, or are looking to partner with us, we’d love to hear from you.
           </p>
         </div>
       </section>
 
       {/* 2. Main Layout (Left: Info, Right: Form) */}
-      <section className="w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-10 lg:mt-[-40px] relative z-20">
+      <section className="w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto mt-10 lg:mt-[-60px] relative z-20">
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-[60px] items-start">
           
           {/* Left Panel: Contact Info */}

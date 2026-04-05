@@ -15,7 +15,6 @@ export default {
         'text-muted': 'var(--text-muted)',
         'text-secondary': 'var(--text-secondary)',
         'warm-orange': 'var(--warm-orange)',
-        'white': 'var(--white)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

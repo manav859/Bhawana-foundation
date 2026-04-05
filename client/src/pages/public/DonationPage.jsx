@@ -19,21 +19,29 @@ export function DonationPage() {
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[280px] lg:h-[340px] flex items-center bg-primary-blue overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
-        <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-20 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+      <section className="relative w-full h-[340px] lg:h-[420px] flex items-center bg-gray-900 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="/uploads/donate-hero.jpg" 
+            alt="Support Our Cause" 
+            className="w-full h-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-white opacity-5 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+          <div className="absolute left-0 bottom-0 w-[300px] h-[300px] bg-accent-blue opacity-10 rounded-full blur-[60px] -ml-10 -mb-10 pointer-events-none" />
+        </div>
         
         <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col gap-4">
-          <div className="flex items-center gap-2 text-white/80 font-sans text-[13px] font-medium">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white">Donate</span>
+          <div className="flex items-center gap-2 text-white/70 font-sans text-[13px] font-medium">
+            <Link to="/" className="hover:text-white transition-colors text-white/80">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-white/80" />
+            <span className="text-white font-semibold">Donate</span>
           </div>
           <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[600px] leading-[1.2]">
             Support Our Cause
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/80 max-w-[500px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/70 max-w-[500px] leading-[1.6]">
             Your contribution, no matter how small, has the power to change a life. Join us in our mission to create a society where everyone has equitable access.
           </p>
         </div>

@@ -42,7 +42,7 @@ export function ProjectsPage() {
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[340px] overflow-hidden flex items-center">
+      <section className="relative w-full h-[340px] lg:h-[420px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <img 
             src="/uploads/project-hero.jpg" 
@@ -53,15 +53,15 @@ export function ProjectsPage() {
         </div>
         
         <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center justify-center text-center">
-          <div className="flex items-center justify-center gap-1.5 font-sans text-[13px] mb-3">
-            <Link to="/" className="text-white opacity-70 font-medium hover:opacity-100 transition-opacity">Home</Link>
-            <span className="text-white opacity-70 font-medium">/</span>
+          <div className="flex items-center justify-center gap-1.5 font-sans text-[13px] mb-3 text-white/70">
+            <Link to="/" className="font-medium hover:text-white transition-opacity">Home</Link>
+            <span className="font-medium">/</span>
             <span className="text-white font-bold tracking-wide">Projects</span>
           </div>
           <h1 className="font-display text-[40px] lg:text-[64px] font-bold text-white max-w-[800px] leading-[1.1] mb-5 tracking-tight">
             Our Active Projects
           </h1>
-          <p className="font-sans text-[15px] lg:text-[17px] font-normal text-white opacity-80 max-w-[650px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[17px] font-normal text-white/70 max-w-[650px] leading-[1.6]">
             Explore our on-the-ground initiatives creating tangible, lasting impact across<br className="hidden sm:block" />
             communities.
           </p>

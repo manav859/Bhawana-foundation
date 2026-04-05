@@ -6,7 +6,7 @@ export function AboutPage() {
     <main className="flex flex-col w-full bg-white overflow-hidden">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[340px] overflow-hidden flex items-center">
+      <section className="relative w-full h-[340px] lg:h-[420px] overflow-hidden flex items-center">
         <div className="absolute inset-0 z-0">
           <img 
             src="/uploads/about-hero.JPG" 
@@ -16,15 +16,15 @@ export function AboutPage() {
           <div className="absolute inset-0 bg-black/65" />
         </div>
         <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center justify-center gap-4 text-center">
-          <div className="flex items-center justify-center gap-2.5 font-sans text-[15px]">
-            <Link to="/" className="text-gray-400 font-normal hover:text-white transition-colors">Home</Link>
-            <span className="text-gray-400 font-normal">/</span>
+          <div className="flex items-center justify-center gap-2.5 font-sans text-[15px] text-white/70">
+            <Link to="/" className="font-normal hover:text-white transition-colors">Home</Link>
+            <span className="font-normal">/</span>
             <span className="text-white font-semibold tracking-wide">About Us</span>
           </div>
           <h1 className="font-display text-[32px] lg:text-[56px] font-bold text-white max-w-[800px] leading-[1.2]">
             About Bhawna Foundation
           </h1>
-          <p className="font-sans text-[15px] lg:text-[18px] font-normal text-white max-w-[600px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[18px] font-normal text-white/70 max-w-[600px] leading-[1.6]">
             Dedicated to transforming lives through compassion, education, and sustainable development.
           </p>
         </div>

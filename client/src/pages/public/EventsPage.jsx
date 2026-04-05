@@ -35,7 +35,7 @@ export function EventsPage() {
   if (isLoading) {
     return (
       <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
-        <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-gray-900 overflow-hidden">
+        <section className="relative w-full h-[340px] lg:h-[420px] flex items-center bg-gray-900 overflow-hidden">
           <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center text-center gap-4">
             <div className="h-4 w-32 bg-white/20 animate-pulse rounded-full" />
             <div className="h-12 w-3/4 bg-white/20 animate-pulse rounded-md" />
@@ -57,7 +57,7 @@ export function EventsPage() {
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
       
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[300px] lg:h-[340px] flex items-center bg-gray-900 overflow-hidden">
+      <section className="relative w-full h-[340px] lg:h-[420px] flex items-center bg-gray-900 overflow-hidden">
         {/* Hero Background Image with Neutral Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -72,15 +72,15 @@ export function EventsPage() {
         </div>
         
         <div className="relative z-10 w-full px-6 lg:px-[120px] max-w-[1440px] mx-auto flex flex-col items-center text-center gap-4">
-          <div className="flex items-center gap-2 font-sans text-[13px] font-medium text-white">
-            <Link to="/" className="opacity-70 hover:opacity-100 transition-opacity">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5 opacity-70" />
-            <span className="opacity-100">Events</span>
+          <div className="flex items-center gap-2 font-sans text-[13px] font-medium text-white/70">
+            <Link to="/" className="hover:text-white transition-opacity">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-white">Events</span>
           </div>
           <h1 className="font-display text-[32px] lg:text-[44px] font-bold text-white max-w-[800px] leading-[1.2]">
             Upcoming Events & Campaigns
           </h1>
-          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white opacity-70 max-w-[600px] leading-[1.6]">
+          <p className="font-sans text-[15px] lg:text-[16px] font-normal text-white/70 max-w-[600px] leading-[1.6]">
             Participate in our upcoming workshops, fundraisers, and community drives to make a direct impact on the ground.
           </p>
         </div>
