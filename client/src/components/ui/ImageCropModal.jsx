@@ -64,10 +64,17 @@ export function ImageCropModal({ imageSrc, onCancel, onCropComplete }) {
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [aspect, setAspect] = useState(null);
+  const [originalAspect, setOriginalAspect] = useState(1);
   const [processing, setProcessing] = useState(false);
 
   const onCropDone = useCallback((_croppedArea, croppedAreaPixelsVal) => {
     setCroppedAreaPixels(croppedAreaPixelsVal);
+  }, []);
+
+  const handleMediaLoaded = useCallback((mediaSize) => {
+    if (mediaSize.width && mediaSize.height) {
+      setOriginalAspect(mediaSize.width / mediaSize.height);
+    }
   }, []);
 
   const handleConfirm = async () => {
@@ -75,7 +82,11 @@ export function ImageCropModal({ imageSrc, onCancel, onCropComplete }) {
     try {
       setProcessing(true);
       const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels, rotation);
-      onCropComplete(croppedBlob);
+      if (croppedBlob) {
+        onCropComplete(croppedBlob);
+      } else {
+        throw new Error("Could not create image blob.");
+      }
     } catch (err) {
       console.error('Crop failed:', err);
     } finally {
@@ -101,7 +112,8 @@ export function ImageCropModal({ imageSrc, onCancel, onCropComplete }) {
             crop={crop}
             zoom={zoom}
             rotation={rotation}
-            aspect={aspect}
+            aspect={aspect || originalAspect}
+            onMediaLoaded={handleMediaLoaded}
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onRotationChange={setRotation}

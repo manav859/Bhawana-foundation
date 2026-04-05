@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Image as ImageIcon, Play, Loader2 } from 'lucide-react';
+import { ChevronRight, Image as ImageIcon, Play, ChevronLeft } from 'lucide-react';
 import { http } from '@/features/api/http.js';
 import { Skeleton } from '@/components/ui/Skeleton.jsx';
 
 export function GalleryPage() {
   const [activeTab, setActiveTab] = useState('All');
+  const [activeMonth, setActiveMonth] = useState('All Months');
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
 
   useEffect(() => {
     fetchGallery();
@@ -17,7 +22,7 @@ export function GalleryPage() {
   const fetchGallery = async () => {
     try {
       setLoading(true);
-      const res = await http.get('/gallery');
+      const res = await http.get('/gallery?limit=2000');
       setGalleryItems(res.data.data || []);
     } catch (err) {
       setError('Failed to load gallery');
@@ -27,9 +32,15 @@ export function GalleryPage() {
     }
   };
 
-  // Derive categories from fetched data
-  const dataCategories = [...new Set(galleryItems.map(item => item.category).filter(Boolean))];
-  const categories = ['All', 'Photos', 'Videos', ...dataCategories];
+  // Extract unique categories
+  const categories = [...new Set(['All', 'Photos', 'Videos', ...galleryItems.map(item => item.category).filter(Boolean)])];
+
+  // Extract unique months from createdAt
+  const months = ['All Months', ...new Set(galleryItems.map(item => {
+    if (!item.createdAt) return null;
+    const date = new Date(item.createdAt);
+    return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  }).filter(Boolean))];
 
   // Determine type based on image URL extension
   const getType = (item) => {
@@ -37,13 +48,49 @@ export function GalleryPage() {
     return 'image';
   };
 
+  const getOptimizedUrl = (url) => {
+    if (!url) return '';
+    // Apply dynamic transformations for ImageKit URLs
+    if (url.includes('ik.imagekit.io')) {
+      const separator = url.includes('?') ? '&' : '?';
+      const isVid = url.match(/\.(mp4|webm|mov|mkv)/i);
+      return isVid ? `${url}${separator}tr=f-mp4` : `${url}${separator}tr=w-auto,f-auto`;
+    }
+    return url;
+  };
+
   const filteredGallery = galleryItems.filter(item => {
     const type = getType(item);
-    if (activeTab === 'All') return true;
-    if (activeTab === 'Photos') return type === 'image';
-    if (activeTab === 'Videos') return type === 'video';
-    return item.category === activeTab;
+    
+    // Category Filter
+    let categoryMatch = false;
+    if (activeTab === 'All') categoryMatch = true;
+    else if (activeTab === 'Photos') categoryMatch = (type === 'image');
+    else if (activeTab === 'Videos') categoryMatch = (type === 'video');
+    else categoryMatch = (item.category === activeTab);
+
+    // Month Filter
+    let monthMatch = true;
+    if (activeMonth !== 'All Months') {
+       if (!item.createdAt) {
+         monthMatch = false;
+       } else {
+         const itemMonth = new Date(item.createdAt).toLocaleString('default', { month: 'long', year: 'numeric' });
+         monthMatch = (itemMonth === activeMonth);
+       }
+    }
+
+    return categoryMatch && monthMatch;
   });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredGallery.length / itemsPerPage);
+  const currentItems = filteredGallery.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, activeMonth]);
 
   return (
     <main className="flex flex-col w-full bg-bg-light overflow-hidden pb-20">
@@ -81,28 +128,44 @@ export function GalleryPage() {
         
         <div className="flex flex-col gap-10">
           
-          {/* Tabs */}
-          <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-hide justify-center">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveTab(cat)}
-                className={`px-6 py-2 rounded-full font-sans text-[14px] font-semibold transition-all whitespace-nowrap border ${
-                  activeTab === cat 
-                    ? 'bg-primary-blue border-primary-blue text-white shadow-md' 
-                    : 'bg-white border-border-light text-text-secondary hover:border-primary-blue/30 hover:text-primary-blue'
-                }`}
+          {/* Filters Area */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            {/* Tabs */}
+            <div className="flex items-center gap-3 overflow-x-auto pb-4 md:pb-0 scrollbar-hide justify-center md:justify-start w-full">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveTab(cat)}
+                  className={`px-6 py-2 rounded-full font-sans text-[14px] font-semibold transition-all whitespace-nowrap border ${
+                    activeTab === cat 
+                      ? 'bg-primary-blue border-primary-blue text-white shadow-md' 
+                      : 'bg-white border-border-light text-text-secondary hover:border-primary-blue/30 hover:text-primary-blue'
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Month Filter */}
+            {months.length > 1 && (
+              <select
+                value={activeMonth}
+                onChange={(e) => setActiveMonth(e.target.value)}
+                className="px-4 py-2 bg-white border border-border-light rounded-xl font-sans text-[14px] text-text-secondary outline-none focus:border-primary-blue transition-colors min-w-[150px]"
               >
-                {cat}
-              </button>
-            ))}
+                {months.map(m => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           {/* Loading State */}
           {loading && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(6)].map((_, i) => (
-                <Skeleton key={i} className="aspect-square rounded-[24px]" />
+            <div className="grid grid-cols-3 gap-1 md:gap-2">
+              {[...Array(9)].map((_, i) => (
+                <Skeleton key={i} className="aspect-square w-full rounded-none" />
               ))}
             </div>
           )}
@@ -118,61 +181,130 @@ export function GalleryPage() {
           )}
 
           {/* Empty State */}
-          {!loading && !error && filteredGallery.length === 0 && (
+          {!loading && !error && currentItems.length === 0 && (
             <div className="text-center py-16">
               <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="font-display text-xl font-semibold text-text-dark mb-2">No photos found</h3>
-              <p className="text-text-secondary">We'll be adding new photos soon. Check back later!</p>
+              <p className="text-text-secondary">Try selecting a different category or month.</p>
             </div>
           )}
 
           {/* Gallery Grid */}
-          {!loading && !error && filteredGallery.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredGallery.map((item) => {
+          {!loading && !error && currentItems.length > 0 && (
+            <div className="grid grid-cols-3 gap-1 md:gap-2">
+              {currentItems.map((item) => {
                 const type = getType(item);
+                const optimalResourceUrl = getOptimizedUrl(item.image);
                 return (
-                  <div 
-                    key={item._id} 
-                    className="relative w-full aspect-square rounded-[24px] overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-50"
-                    onClick={() => window.open(item.image, '_blank')}
-                    title="Click to view full image"
-                  >
-                    {type === 'video' ? (
-                      <video 
-                        src={item.image} 
-                        className="w-full h-full object-cover transition-transform duration-700" 
-                        muted 
-                        loop 
-                        onMouseEnter={(e) => e.target.play()} 
-                        onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
-                      />
-                    ) : (
-                      <img src={item.image} alt={item.altText || item.title || 'Gallery image'} className="w-full h-full object-cover transition-transform duration-700" />
-                    )}
-                    
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
-                      {item.category && <span className="font-sans text-[12px] font-bold text-white/80 uppercase tracking-[1px] mb-1">{item.category}</span>}
-                      {item.title && <h4 className="font-display text-[20px] font-bold text-white leading-tight">{item.title}</h4>}
-                    </div>
-                    
-                    <div className="absolute top-6 right-6 bg-white/20 backdrop-blur-md p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {type === 'video' ? (
-                        <Play className="w-5 h-5 text-white" fill="white" />
-                      ) : (
-                        <ImageIcon className="w-5 h-5 text-white" />
-                      )}
-                    </div>
-                  </div>
+                  <GalleryItem key={item._id} item={item} type={type} optimalUrl={optimalResourceUrl} />
                 );
               })}
             </div>
           )}
 
+          {/* Pagination */}
+          {!loading && !error && totalPages > 1 && (
+            <div className="flex items-center justify-center gap-3 mt-8 flex-wrap">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="flex items-center justify-center p-2 rounded-lg border border-border-light bg-white text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                aria-label="Previous Page"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              <div className="flex items-center gap-1.5 flex-wrap justify-center">
+                {[...Array(totalPages)].map((_, idx) => {
+                  const p = idx + 1;
+                  if (
+                    p === 1 || 
+                    p === totalPages || 
+                    (p >= currentPage - 1 && p <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={p}
+                        onClick={() => setCurrentPage(p)}
+                        className={`w-9 h-9 flex items-center justify-center rounded-lg font-sans text-sm font-semibold transition-colors ${
+                          currentPage === p
+                            ? 'bg-primary-blue text-white shadow-sm'
+                            : 'bg-white border border-border-light text-text-secondary hover:bg-gray-50'
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    );
+                  }
+                  if (p === currentPage - 2 || p === currentPage + 2) {
+                    return <span key={p} className="text-text-secondary px-1 tracking-widest">...</span>;
+                  }
+                  return null;
+                })}
+              </div>
+              
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="flex items-center justify-center p-2 rounded-lg border border-border-light bg-white text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                aria-label="Next Page"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+
         </div>
       </section>
-
     </main>
   );
 }
+
+// Sub-component to handle per-image skeleton load logic
+function GalleryItem({ item, type, optimalUrl }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div 
+      className="relative w-full aspect-square rounded-none overflow-hidden group cursor-pointer bg-slate-50 border border-border-light/30"
+      onClick={() => window.open(item.image, '_blank')}
+      title="Click to view full image"
+    >
+      {/* Skeletons structure until the photo loads */}
+      {!isLoaded && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100">
+          <Skeleton className="w-full h-full" />
+        </div>
+      )}
+
+      {type === 'video' ? (
+        <video 
+          src={optimalUrl} 
+          className="w-full h-full object-cover" 
+          muted 
+          loop 
+          onMouseEnter={(e) => e.target.play()} 
+          onMouseLeave={(e) => { e.target.pause(); e.target.currentTime = 0; }}
+          onLoadedData={() => setIsLoaded(true)}
+        />
+      ) : (
+        <img 
+          src={optimalUrl} 
+          alt={item.altText || item.title || 'Gallery image'} 
+          className="w-full h-full object-cover" 
+          onLoad={() => setIsLoaded(true)}
+        />
+      )}
+      
+      {/* Dark Dim Hover Effect */}
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none" />
+      
+      {type === 'video' && (
+        <div className="absolute top-3 right-3 bg-black/30 backdrop-blur-md p-1.5 rounded-full z-20">
+          <Play className="w-4 h-4 text-white" fill="white" />
+        </div>
+      )}
+    </div>
+  );
+}
+

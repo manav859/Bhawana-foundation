@@ -172,11 +172,7 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {loading ? (
-              [...Array(3)].map((_, i) => (
-                <CardSkeleton key={i} />
-              ))
-            ) : featuredProjects.length === 0 ? (
+            {loading ? null : featuredProjects.length === 0 ? (
               <div className="col-span-full py-12 flex flex-col items-center justify-center bg-white rounded-xl border border-border-light text-center">
                 <Target className="w-10 h-10 text-slate-300 mb-3" />
                 <h3 className="font-display text-lg font-semibold text-text-dark">No Projects Available</h3>
@@ -262,23 +258,7 @@ export function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             {loading ? (
-               [...Array(3)].map((_, i) => (
-                 <div key={i} className="flex flex-col gap-5 p-8 rounded-xl bg-bg-light border border-border-light relative animate-pulse">
-                   <div className="w-8 h-8 bg-slate-200 rounded-md mb-4" />
-                   <div className="h-4 bg-slate-200 rounded w-full mb-2" />
-                   <div className="h-4 bg-slate-200 rounded w-5/6 mb-2" />
-                   <div className="h-4 bg-slate-200 rounded w-4/6 mb-6" />
-                   <div className="flex items-center gap-3 pt-2 mt-auto">
-                     <div className="w-11 h-11 bg-slate-200 rounded-full" />
-                     <div className="flex flex-col gap-2">
-                       <div className="h-4 bg-slate-200 rounded w-24" />
-                       <div className="h-3 bg-slate-200 rounded w-16" />
-                     </div>
-                   </div>
-                 </div>
-               ))
-             ) : testimonials.length > 0 ? (
+             {loading ? null : testimonials.length > 0 ? (
                testimonials.map((testimonial, idx) => {
                   const colors = [
                     { text: 'text-primary-blue', bg: 'bg-primary-blue' },

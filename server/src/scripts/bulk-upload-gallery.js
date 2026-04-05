@@ -38,19 +38,19 @@ async function run() {
     await connectDatabase();
     console.log('✅ Connected to MongoDB');
 
-    // 2. Scan Directory for Images
+    // 2. Scan Directory for Images and Videos
     const files = await fs.readdir(sourceDir);
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.heic', '.webp'];
-    const imageFiles = files.filter(file => 
-      imageExtensions.includes(path.extname(file).toLowerCase())
+    const mediaExtensions = ['.jpg', '.jpeg', '.png', '.heic', '.webp', '.mp4', '.mkv', '.mov', '.webm'];
+    const mediaFiles = files.filter(file => 
+      mediaExtensions.includes(path.extname(file).toLowerCase())
     );
 
-    if (imageFiles.length === 0) {
-      console.log('❌ No image files found in the specified directory.');
+    if (mediaFiles.length === 0) {
+      console.log('❌ No supported media files found in the specified directory.');
       process.exit(0);
     }
 
-    console.log(`📸 Found ${imageFiles.length} images to upload.`);
+    console.log(`📸 Found ${mediaFiles.length} media files to upload.`);
 
     // 3. Process Uploads (Concurrency Limit: 5)
     // Decreased concurrency slightly since memory buffers of 400 photos can get tight,
@@ -59,8 +59,8 @@ async function run() {
     let completed = 0;
     let failed = 0;
 
-    for (let i = 0; i < imageFiles.length; i += CONCURRENCY) {
-      const chunk = imageFiles.slice(i, i + CONCURRENCY);
+    for (let i = 0; i < mediaFiles.length; i += CONCURRENCY) {
+      const chunk = mediaFiles.slice(i, i + CONCURRENCY);
       
       await Promise.all(chunk.map(async (fileName) => {
         const filePath = path.join(sourceDir, fileName);
@@ -104,7 +104,7 @@ async function run() {
           });
 
           completed++;
-          process.stdout.write(`✅ [${completed}/${imageFiles.length}] Uploaded ${fileName}\r`);
+          process.stdout.write(`✅ [${completed}/${mediaFiles.length}] Uploaded ${fileName}\r`);
         } catch (err) {
           failed++;
           console.error(`\n❌ Error uploading ${fileName}:`, err.message);

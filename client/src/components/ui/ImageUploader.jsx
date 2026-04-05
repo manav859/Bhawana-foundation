@@ -20,9 +20,9 @@ export function ImageUploader({
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate size (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      setError('File size should not exceed 10MB');
+    // Validate size (500MB)
+    if (file.size > 500 * 1024 * 1024) {
+      setError('File size should not exceed 500MB');
       return;
     }
 
@@ -90,18 +90,25 @@ export function ImageUploader({
   };
 
   const currentUrl = typeof value === 'string' ? value : value?.url;
-  const isVideo = currentUrl?.match(/\.(mp4|webm|mov)/) || value?.resourceType === 'video';
+  const isVideo = currentUrl?.match(/\.(mp4|webm|mov|mkv)/i) || value?.resourceType === 'video';
+
+  // Make sure admin preview leverages ImageKit's auto-format engine perfectly
+  const getPreviewUrl = () => {
+    if (!currentUrl || !currentUrl.includes('ik.imagekit.io')) return currentUrl;
+    const separator = currentUrl.includes('?') ? '&' : '?';
+    return isVideo ? `${currentUrl}${separator}tr=f-mp4` : `${currentUrl}${separator}tr=f-auto`;
+  };
 
   return (
     <div className={`space-y-1.5 ${className}`}>
       {label && <label className="block text-sm font-medium text-text-dark">{label}</label>}
 
       {currentUrl ? (
-        <div className="relative w-full h-[240px] rounded-lg overflow-hidden border border-border-light group">
+        <div className="relative w-full h-[240px] rounded-lg overflow-hidden border border-border-light group bg-gray-50">
           {isVideo ? (
-            <video src={currentUrl} className="w-full h-full object-cover" controls />
+            <video src={getPreviewUrl()} className="w-full h-full object-contain" controls />
           ) : (
-            <img src={currentUrl} alt="Preview" className="w-full h-full object-cover" />
+            <img src={getPreviewUrl()} alt="Preview" className="w-full h-full object-contain" />
           )}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
             <button
@@ -127,7 +134,7 @@ export function ImageUploader({
               </span>
               {!uploading && ' or drag and drop'}
             </p>
-            <p className="text-xs text-text-secondary">PNG, JPG, WEBP, HEIC, MP4 (Max: 10MB)</p>
+            <p className="text-xs text-text-secondary">PNG, JPG, WEBP, HEIC, MP4, MOV (Max: 500MB)</p>
           </div>
           <input
             ref={inputRef}
