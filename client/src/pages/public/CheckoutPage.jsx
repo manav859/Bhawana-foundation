@@ -48,6 +48,32 @@ export function CheckoutPage() {
       setLoading(true);
       setError('');
 
+      // [TEMPORARY MOCK] Mock order creation and payment success for now
+      setTimeout(() => {
+        const mockOrder = {
+          _id: 'mock-12345',
+          orderNumber: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+          items: items.map(i => ({
+            product: {
+              images: [i.image],
+              slug: ''
+            },
+            quantity: i.quantity,
+            price: i.price,
+            title: i.title,
+          })),
+          total: grandTotal,
+          donationExtra: donationExtra,
+        };
+        
+        clearCart();
+        navigate(`/order-confirmation/${mockOrder.orderNumber}`, {
+          state: { order: mockOrder },
+          replace: true,
+        });
+      }, 1000);
+
+      /* PROPER IMPLEMENTATION (Commented out for now)
       // 1. Create order
       const orderPayload = {
         items: items.map((i) => ({ product: i.productId, quantity: i.quantity })),
@@ -102,6 +128,7 @@ export function CheckoutPage() {
 
       const razorpay = new window.Razorpay(options);
       razorpay.open();
+      */
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
       setLoading(false);
