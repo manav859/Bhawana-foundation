@@ -48,32 +48,6 @@ export function CheckoutPage() {
       setLoading(true);
       setError('');
 
-      // [TEMPORARY MOCK] Mock order creation and payment success for now
-      setTimeout(() => {
-        const mockOrder = {
-          _id: 'mock-12345',
-          orderNumber: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
-          items: items.map(i => ({
-            product: {
-              images: [i.image],
-              slug: ''
-            },
-            quantity: i.quantity,
-            price: i.price,
-            title: i.title,
-          })),
-          total: grandTotal,
-          donationExtra: donationExtra,
-        };
-        
-        clearCart();
-        navigate(`/order-confirmation/${mockOrder.orderNumber}`, {
-          state: { order: mockOrder },
-          replace: true,
-        });
-      }, 1000);
-
-      /* PROPER IMPLEMENTATION (Commented out for now)
       // 1. Create order
       const orderPayload = {
         items: items.map((i) => ({ product: i.productId, quantity: i.quantity })),
@@ -83,52 +57,15 @@ export function CheckoutPage() {
       const orderRes = await shopService.createOrder(orderPayload);
       const order = orderRes.data.data;
 
-      // 2. Create Razorpay order
-      const rpRes = await paymentService.createRazorpayOrder({ orderId: order._id });
-      const rpData = rpRes.data.data;
+      // 2. Mock payment verification (MOCK SUCCESS FOR NOW)
+      await paymentService.mockVerifyPayment({ orderId: order._id });
 
-      // 3. Open Razorpay popup
-      const options = {
-        key: rpData.keyId,
-        amount: rpData.amount,
-        currency: rpData.currency,
-        name: 'Bhawna Foundation',
-        description: `Order ${rpData.orderNumber}`,
-        order_id: rpData.razorpayOrderId,
-        handler: async (response) => {
-          try {
-            await paymentService.verifyPayment({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-              orderId: order._id,
-            });
-            clearCart();
-            navigate(`/order-confirmation/${order.orderNumber}`, {
-              state: { order },
-              replace: true,
-            });
-          } catch (err) {
-            setError('Payment verification failed. Please contact support.');
-          }
-        },
-        prefill: {
-          name: address.name,
-          email: buyer?.email || '',
-          contact: address.phone,
-        },
-        theme: { color: '#0B5ED7' },
-        modal: {
-          ondismiss: () => {
-            setError('Payment was cancelled. Your order is saved — you can retry from My Orders.');
-            setLoading(false);
-          },
-        },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
-      */
+      // 3. Finalize
+      clearCart();
+      navigate(`/order-confirmation/${order.orderNumber}`, {
+        state: { order },
+        replace: true,
+      });
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
       setLoading(false);

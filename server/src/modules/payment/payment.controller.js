@@ -102,3 +102,36 @@ export const verifyPayment = catchAsync(async (req, res) => {
 
   sendResponse(res, { data: order, message: 'Payment verified. Order confirmed.' });
 });
+
+/**
+ * Mock payment verification for development/testing.
+ * Skips signature verification and marks order as paid.
+ */
+export const mockVerifyPayment = catchAsync(async (req, res) => {
+  const { orderId } = req.body;
+
+  // Use simple update since we're mocking
+  const order = await Order.findOneAndUpdate(
+    { _id: orderId, buyer: req.buyer.id },
+    {
+      status: 'paid',
+      'payment.status': 'captured',
+      'payment.razorpayPaymentId': 'mock_' + Date.now(),
+      'payment.razorpaySignature': 'mock_signature',
+    },
+    { new: true },
+  );
+
+  if (!order) throw new ApiError(404, 'Order not found.');
+
+  // Decrease stock & increase sales count
+  const bulkOps = order.items.map((item) => ({
+    updateOne: {
+      filter: { _id: item.product },
+      update: { $inc: { stock: -item.quantity, salesCount: item.quantity } },
+    },
+  }));
+  if (bulkOps.length > 0) await Product.bulkWrite(bulkOps);
+
+  sendResponse(res, { data: order, message: 'Order marked as PAID (Mock).' });
+});

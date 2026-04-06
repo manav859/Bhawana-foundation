@@ -16,4 +16,7 @@ export const paymentService = {
   verifyPayment(data) {
     return http.post('/payment/verify', data, withBuyerAuth());
   },
+  mockVerifyPayment(data) {
+    return http.post('/payment/mock-verify', data, withBuyerAuth());
+  },
 };
