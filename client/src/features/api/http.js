@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getStoredSession } from '@/features/auth/auth.storage.js';
+import { getStoredBuyerSession } from '@/features/buyer-auth/buyer-auth.storage.js';
 
 function getBaseURL() {
   // If an env var is set AND we're in production build, use it
@@ -22,10 +23,23 @@ export const http = axios.create({
 });
 
 http.interceptors.request.use((config) => {
-  const session = getStoredSession();
+  // 1. If explicit Authorization was passed (e.g. via withBuyerAuth), skip interceptor logic
+  if (config.headers.Authorization) {
+    return config;
+  }
 
-  if (session?.token) {
-    config.headers.Authorization = `Bearer ${session.token}`;
+  // 2. Try Admin session
+  const adminSession = getStoredSession();
+  if (adminSession?.token) {
+    config.headers.Authorization = `Bearer ${adminSession.token}`;
+    return config;
+  }
+
+  // 3. Try Buyer session
+  const buyerSession = getStoredBuyerSession();
+  if (buyerSession?.token) {
+    config.headers.Authorization = `Bearer ${buyerSession.token}`;
+    return config;
   }
 
   return config;
