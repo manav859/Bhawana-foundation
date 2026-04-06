@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart, ShoppingCart } from 'lucide-react';
+import { Menu, X, Heart, ShoppingCart, User } from 'lucide-react';
 import { useCart } from '@/features/cart/CartContext.jsx';
+import { useBuyerAuth } from '@/features/buyer-auth/BuyerAuthContext.jsx';
 import { CartDrawer } from '@/components/public/CartDrawer.jsx';
 
 export function Navbar() {
@@ -9,6 +10,7 @@ export function Navbar() {
   const [cartOpen, setCartOpen] = useState(false);
   const location = useLocation();
   const { cartCount } = useCart();
+  const { isAuthenticated } = useBuyerAuth();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -50,7 +52,7 @@ export function Navbar() {
         })}
       </div>
 
-      {/* Desktop Cart + Donation Button */}
+      {/* Desktop Cart + Account + Donation Button */}
       <div className="hidden lg:flex items-center gap-3">
         <button
           onClick={() => setCartOpen(true)}
@@ -64,6 +66,16 @@ export function Navbar() {
             </span>
           )}
         </button>
+
+        {/* Account/Login Icon */}
+        <Link
+          to={isAuthenticated ? "/account" : "/shop/login"}
+          className="p-2.5 rounded-lg text-text-dark hover:bg-bg-light transition-colors"
+          aria-label={isAuthenticated ? "My Account" : "Login"}
+        >
+          <User className="h-5 w-5" />
+        </Link>
+
         <Link
           to="/donate"
           className="flex items-center gap-2 rounded-lg bg-primary-blue px-7 py-3 font-sans text-[15px] font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-md"
@@ -120,6 +132,17 @@ export function Navbar() {
               </Link>
             );
           })}
+          
+          {/* Mobile Account Link */}
+          <Link
+            to={isAuthenticated ? "/account" : "/shop/login"}
+            onClick={() => setIsOpen(false)}
+            className="font-sans text-base text-text-dark font-medium flex items-center gap-2"
+          >
+            <User className="h-5 w-5" />
+            {isAuthenticated ? "My Account" : "Login / Register"}
+          </Link>
+
           <div className="mt-4 pt-4 border-t border-border-light">
              <Link
               to="/donate"

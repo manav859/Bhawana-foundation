@@ -59,6 +59,7 @@ import { OrderConfirmationPage } from '@/pages/public/OrderConfirmationPage.jsx'
 import { MyOrdersPage } from '@/pages/public/MyOrdersPage.jsx';
 import { ShopLoginPage } from '@/pages/public/ShopLoginPage.jsx';
 import { ShopRegisterPage } from '@/pages/public/ShopRegisterPage.jsx';
+import { AccountPage } from '@/pages/public/AccountPage.jsx';
 import { RequireBuyerAuth } from '@/features/buyer-auth/buyer-auth.guard.jsx';
 
 export function AppRouter() {
@@ -97,6 +98,7 @@ export function AppRouter() {
 
           {/* Shop (Buyer Auth Required) */}
           <Route element={<RequireBuyerAuth />}>
+            <Route path="account" element={<AccountPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="order-confirmation/:id" element={<OrderConfirmationPage />} />
             <Route path="my-orders" element={<MyOrdersPage />} />
