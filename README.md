@@ -10,7 +10,7 @@ Production-grade MERN scaffold for the Bhawna Foundation public website and admi
 
 ## Folder Structure
 
-```text
+``text
 .
 |-- client/
 |   |-- src/
