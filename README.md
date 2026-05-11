@@ -55,6 +55,6 @@ Production-grade MERN scaffold for the Bhawna Foundation public website and admi
    - public app: `http://localhost:5173`
    - API: `http://localhost:5000`
 
-## Current Scope
+## Current Scope 
 
 Phase 1 intentionally covers architecture, routing, layout shells, Tailwind setup, backend structure, env files, and dummy routes only. Business features, data models, admin CRUD forms, and page-specific UI implementations are reserved for later phases.
