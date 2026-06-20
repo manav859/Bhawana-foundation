@@ -134,7 +134,7 @@ export function HomePage() {
               Empowering Communities, Transforming Lives
             </h2>
             <p className="font-sans text-[16px] font-normal text-text-secondary leading-[1.7]">
-              Bhawna Foundation is a non-profit organization dedicated to creating lasting change in underprivileged communities. Through education, healthcare, women empowerment, and sustainable development programs, we strive to build a world where every individual has the opportunity to thrive.
+              Bhawana Foundation is a non-profit organization dedicated to creating lasting change in underprivileged communities. Through education, healthcare, women empowerment, and sustainable development programs, we strive to build a world where every individual has the opportunity to thrive.
             </p>
             <div className="flex flex-col gap-3 py-2">
               <div className="flex items-center gap-2.5">
